@@ -26,13 +26,13 @@ then
 
   # commit and tag
   git add CHANGELOG.md package.json
-  git commit -m "release: v$VERSION"
-  git tag "v$VERSION"
+  git commit -m "release(router): v$VERSION"
+  git tag "router-v$VERSION"
 
   # commit
   yarn publish --new-version "$VERSION" --no-commit-hooks --no-git-tag-version
 
   # # publish
-  git push origin refs/tags/v$VERSION
+  git push origin refs/tags/router-v$VERSION
   git push
 fi
