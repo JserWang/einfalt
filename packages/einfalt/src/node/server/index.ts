@@ -216,7 +216,7 @@ async function startServer(
 
       info(
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        chalk.cyan(`\n  einfalt v${require('einfalt/package.json').version}`)
+        chalk.cyan(`\n  einfalt v${require('@einfalt/einfalt/package.json').version}`)
         + chalk.green(' dev server running at:\n'),
         {
           clear: !server.config.logger.hasWarned
