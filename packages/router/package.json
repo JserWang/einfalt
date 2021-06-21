@@ -1,6 +1,6 @@
 {
   "name": "@einfalt/router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "JserWang <jserwang@gmail.com> (https://github.com/JserWang)",
   "main": "dist/einfalt-router.cjs.js",
@@ -27,11 +27,11 @@
     "@rollup/plugin-replace": "^2.4.2",
     "mini-types": "^0.1.5",
     "miniprogram-api-typings": "^3.3.2",
+    "path-to-regexp": "^6.2.0",
     "rollup": "^2.52.2",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
-    "vitepress": "^0.13.2",
-    "path-to-regexp": "^6.2.0"
+    "vitepress": "^0.13.2"
   },
   "publishConfig": {
     "access": "public"
