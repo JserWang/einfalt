@@ -20,7 +20,7 @@ const pkgPath = path.resolve(pkgDir, 'package.json')
  * @type {{ name: string, version: string }}
  */
 const pkg = require(pkgPath)
-const pkgName = pkg.name.replace(/^@einfalt\//, '')
+const pkgName = pkg.name
 const currentVersion = pkg.version
 /**
  * @type {boolean}
@@ -111,7 +111,7 @@ async function main() {
   }
 
   const tag
-    = pkgName === 'vite' ? `v${targetVersion}` : `${pkgName}@${targetVersion}`
+    = pkgName === '@einfalt/einfalt' ? `v${targetVersion}` : `${pkgName}@${targetVersion}`
 
   if (targetVersion.includes('beta') && !args.tag) {
     /**
@@ -190,29 +190,29 @@ function updateVersion(version) {
  * @param {Function} runIfNotDry
  */
 async function publishPackage(version, runIfNotDry) {
-  // const publicArgs = [
-  //   'publish',
-  //   '--no-git-tag-version',
-  //   '--new-version',
-  //   version,
-  //   '--access',
-  //   'public'
-  // ]
-  // if (args.tag) {
-  //   publicArgs.push('--tag', args.tag)
-  // }
-  // try {
-  //   await runIfNotDry('yarn', publicArgs, {
-  //     stdio: 'pipe'
-  //   })
-  //   console.log(chalk.green(`Successfully published ${pkgName}@${version}`))
-  // } catch (e) {
-  //   if (e.stderr.match(/previously published/)) {
-  //     console.log(chalk.red(`Skipping already published: ${pkgName}`))
-  //   } else {
-  //     throw e
-  //   }
-  // }
+  const publicArgs = [
+    'publish',
+    '--no-git-tag-version',
+    '--new-version',
+    version,
+    '--access',
+    'public'
+  ]
+  if (args.tag) {
+    publicArgs.push('--tag', args.tag)
+  }
+  try {
+    await runIfNotDry('yarn', publicArgs, {
+      stdio: 'pipe'
+    })
+    console.log(chalk.green(`Successfully published ${pkgName}@${version}`))
+  } catch (e) {
+    if (e.stderr.match(/previously published/)) {
+      console.log(chalk.red(`Skipping already published: ${pkgName}`))
+    } else {
+      throw e
+    }
+  }
 }
 
 main().catch((err) => {

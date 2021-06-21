@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 # Licenses of bundled dependencies
-The published einfalt artifact additionally contains code with the following licenses:
+The published Vite artifact additionally contains code with the following licenses:
 MIT, ISC
 
 # Bundled dependencies:
