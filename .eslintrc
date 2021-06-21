@@ -1,0 +1,11 @@
+{
+  "env": {
+    "node": true
+  },
+  "globals": {
+    "__DEV__": true
+  },
+  "extends": "@jserwang",
+  "rules": {
+  }
+}
