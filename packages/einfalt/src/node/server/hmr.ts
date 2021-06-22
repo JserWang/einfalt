@@ -1,8 +1,10 @@
 import path from 'path'
+import { readFileSync } from 'fs'
 import chalk from 'chalk'
+import { TaskFunction } from 'gulp'
 import { tsTask } from '../tasks/typescript'
 import { ResolvedConfig } from '../config'
-import { createDebugger, emptyTask } from '../utils'
+import { createDebugger } from '../utils'
 import { execute } from '../tasks'
 import { lessTask } from '../tasks/less'
 import { wxmlDistTask, wxmlTask } from '../tasks/wxml'
@@ -12,6 +14,7 @@ import { NPM_SOURCE } from '../constants'
 import { npmTask } from '../tasks/npm'
 import { imageTask } from '../tasks/image'
 import { routerTask } from '../tasks/router'
+import { hasRouteBlock } from '../wxml'
 import { createServer, EinfaltDevServer } from './index'
 
 export const debugHmr = createDebugger('einfalt:hmr')
@@ -60,53 +63,57 @@ function renameExtname(file: string, extname: string) {
   return file.replace(path.extname(file), extname)
 }
 
+function getModuleProcessor(config: ResolvedConfig, file: string): Record<string, () => TaskFunction[]> {
+  return {
+    '.ts': () => {
+      const tasks: TaskFunction[] = []
+      if (config.router && file.includes(config.router)) {
+        tasks.push(routerTask(config))
+      }
+
+      tasks.push(tsTask(config, pathToGlob(file)))
+      return tasks
+    },
+    '.less': () => [lessTask(config, pathToGlob(file))],
+    '.wxml': () => {
+      const tasks: TaskFunction[] = []
+      const code = String(readFileSync(file))
+      if (config.router && hasRouteBlock(code)) {
+        tasks.push(routerTask(config))
+      }
+      tasks.push(
+        wxmlTask(config, pathToGlob(file)),
+        wxmlDistTask(config, source2Dist(file, config)),
+        jsonDistTask(
+          config,
+          pathToGlob(
+            renameExtname(source2Dist(file, config), '.json')
+          )
+        )
+      )
+
+      return tasks
+    },
+    '.wxs': () => [wxsTask(config, pathToGlob(file))],
+    '.json': () => {
+      return [
+        jsonTask(config, pathToGlob(file)),
+        jsonDistTask(config, source2Dist(file, config))
+      ]
+    }
+  }
+}
+
 export async function updateModules(file: string, config: ResolvedConfig) {
   const extname = path.extname(file)
   if (file.includes(NPM_SOURCE)) {
     await execute([npmTask(config)])
   } else if (file.includes('src')) {
-    switch (extname) {
-      case '.ts':
-        await execute([
-          routerTask(config),
-          tsTask(config, pathToGlob(file))
-        ])
-        break
-      case '.less':
-        await execute([
-          lessTask(config, pathToGlob(file))
-        ])
-        break
-      case '.wxml':
-        await execute([
-          config.router ? routerTask(config) : emptyTask,
-          wxmlTask(config, pathToGlob(file)),
-          wxmlDistTask(config, source2Dist(file, config)),
-          jsonDistTask(
-            config,
-            pathToGlob(
-              renameExtname(source2Dist(file, config), '.json')
-            )
-          )
-        ])
-        break
-      case '.wxs':
-        await execute([
-          wxsTask(config, pathToGlob(file))
-        ])
-        break
-      case '.json':
-        await execute([
-          jsonTask(config, pathToGlob(file)),
-          jsonDistTask(config, source2Dist(file, config))
-        ])
-        break
-      default:
-        await execute([
-          imageTask(config)
-        ])
-        break
+    const processor = getModuleProcessor(config, file)
+    if (processor[extname]) {
+      return await execute(processor[extname]())
     }
+    await execute([imageTask(config)])
   }
 }
 
