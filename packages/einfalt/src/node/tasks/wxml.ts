@@ -9,7 +9,7 @@ import wxml from '../plugins/wxml'
 import { resolveAppendAdditional, resolvePrependAdditional } from '../utils'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
-  config.logger.info(chalk.green('start build wxml'), {
+  config.logger.info(chalk.green('build wxml ') + chalk.dim('start'), {
     timestamp: true
   })
   target = target || config.build.outDir
