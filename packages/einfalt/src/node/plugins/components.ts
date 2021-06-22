@@ -31,10 +31,7 @@ const GENERIC_PREFIX = 'generic:'
  * @param node
  */
 function getGenericNode(node: Record<string, any>) {
-  if (node && Object.keys(node).length > 0) {
-    return Object.keys(node).filter(key => key.startsWith(GENERIC_PREFIX)).map(key => node[ATTR_KEY][key])
-  }
-  return []
+  return Object.keys(node).filter(key => key.startsWith(GENERIC_PREFIX)).map(key => node[key])
 }
 
 /**
@@ -54,7 +51,7 @@ function resolveTags(elements: any) {
         // will output :
         // { 'view': [ { '@attrs': { "generic:selectable": "custom-1" } }, { '@attrs': { "generic:selectable": "custom-2" } } ] }
         if (Object.keys(child).length === 1 && child[ATTR_KEY]) {
-          result = result.concat(getGenericNode(child))
+          result = result.concat(getGenericNode(child[ATTR_KEY]))
         } else {
           result = result.concat(resolveTags(child))
         }
@@ -65,7 +62,7 @@ function resolveTags(elements: any) {
 
     if (element[ATTR_KEY]) {
       // generic
-      result = result.concat(getGenericNode(element))
+      result = result.concat(getGenericNode(element[ATTR_KEY]))
     }
 
     result.push(tagName)
