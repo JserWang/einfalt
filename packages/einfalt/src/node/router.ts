@@ -58,9 +58,8 @@ function resolveSubpackage(subpackageDirName: string, paths: string[]) {
 
 /**
  * 根据传入路由解析出app.json中的pages与subpackages字段值
- * @param routes
  */
-export function resolveAppJson(routes: RouteRecord[]): ResolvedAppJson {
+export function resolveAppJson(routes: RouteRecord[], config: ResolvedConfig): ResolvedAppJson {
   const result: ResolvedAppJson = { pages: [], subpackages: [] }
 
   routes.forEach((route) => {
@@ -78,6 +77,14 @@ export function resolveAppJson(routes: RouteRecord[]): ResolvedAppJson {
       result.pages = pages
     }
   })
+
+  // config.home配置页面默认在app.json的pages中第一位
+  if (config.home) {
+    const { pages } = result
+    const homeIndex = pages.indexOf(config.home)
+    homeIndex > 0 && pages.unshift(pages[homeIndex])
+    result.pages = Array.from(new Set([...pages]))
+  }
 
   return result
 }

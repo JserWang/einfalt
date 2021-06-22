@@ -66,7 +66,7 @@ export default function(config: ResolvedConfig): Transform {
         // 将routes写入app.json
         const appJsonFilePath = path.resolve(config.root, 'src', 'app.json')
         let appJson = readJsonSync(appJsonFilePath)
-        const resolvedAppJson = resolveAppJson(routes)
+        const resolvedAppJson = resolveAppJson(routes, config)
         appJson = { ...appJson, ...resolvedAppJson }
         writeJsonSync(appJsonFilePath, appJson, { spaces: 2 })
 

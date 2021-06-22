@@ -27,6 +27,10 @@ export interface UserConfig {
    */
   root?: string
   /**
+   * 首页路径
+   */
+  home?: string
+  /**
    * Directory to serve as plain static assets. Files in this directory are
    * served and copied to build dist dir as-is without transform. The value
    * can be either an absolute file system path or a path relative to <root>.
