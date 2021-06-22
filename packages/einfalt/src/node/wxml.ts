@@ -45,3 +45,7 @@ export function resolveRouteBlock(path: string) {
 export function clearRouteBlock(code: string): string {
   return code.replace(routeBlockRE, '')
 }
+
+export function hasRouteBlock(code: string): boolean {
+  return !!code.match(routeBlockRE)
+}

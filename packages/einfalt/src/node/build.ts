@@ -2,7 +2,7 @@ import { existsSync, rmSync } from 'fs'
 import path from 'path'
 import chalk from 'chalk'
 import { InlineConfig, resolveConfig, ResolvedConfig } from './config'
-import { normalizePath, transformIgnore } from './utils'
+import { emptyTask, normalizePath, transformIgnore } from './utils'
 import { tsTask } from './tasks/typescript'
 import { jsonDistTask, jsonTask } from './tasks/json'
 import { wxmlDistTask, wxmlTask } from './tasks/wxml'
@@ -11,6 +11,7 @@ import { npmTask } from './tasks/npm'
 import { wxsTask } from './tasks/wxs'
 import { imageTask } from './tasks/image'
 import { execute } from './tasks'
+import { routerTask } from './tasks/router'
 
 export interface BuildOptions {
   /**
@@ -84,6 +85,7 @@ export async function doBuild(inlineConfig: InlineConfig = {}) {
 
   await execute([
     tsTask(config),
+    config.router ? routerTask(config) : emptyTask,
     lessTask(config),
     wxmlTask(config),
     jsonTask(config),

@@ -7,7 +7,6 @@ import inject from 'gulp-inject-string'
 import { ResolvedConfig } from '../config'
 import alias from '../plugins/alias'
 import define from '../plugins/define'
-import router from '../plugins/router'
 import { resolveAppendAdditional, resolvePrependAdditional } from '../utils'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
@@ -22,7 +21,6 @@ function build(config: ResolvedConfig, source: string, target?: string) {
     .src([source, ...config.build.ignore], { nodir: true })
     .pipe(inject.prepend(resolvePrependAdditional(config, 'ts')))
     .pipe(inject.append(resolveAppendAdditional(config, 'ts')))
-    .pipe(router(config))
     .pipe(tsProject())
     .on('error', (err: string) => {
       hasError = true

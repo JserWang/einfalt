@@ -1,7 +1,7 @@
 import { Transform, TransformCallback } from 'stream'
 import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
-import { clearRouteBlock } from '../wxml'
+import { clearRouteBlock, hasRouteBlock } from '../wxml'
 
 export default function(): Transform {
   return new Transform({
@@ -18,8 +18,12 @@ export default function(): Transform {
 
       let code = String(chunk.contents)
 
-      code = clearRouteBlock(code)
+      if (!hasRouteBlock(code)) {
+        return callback(null, chunk)
+      }
 
+      // 存在route block则清空
+      code = clearRouteBlock(code)
       chunk.contents = Buffer.from(code)
 
       callback(null, chunk)

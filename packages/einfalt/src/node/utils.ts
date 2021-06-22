@@ -13,8 +13,11 @@ import { createHash } from 'crypto'
 import os from 'os'
 import debug from 'debug'
 import chalk from 'chalk'
+import gulp from 'gulp'
 import { FS_PREFIX } from './constants'
 import { ResolvedConfig } from './config'
+
+export const emptyTask: gulp.TaskFunction = (done) => { done && done() }
 
 export function slash(p: string): string {
   return p.replace(/\\/g, '/')

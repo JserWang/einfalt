@@ -2,7 +2,7 @@ import path from 'path'
 import chalk from 'chalk'
 import { tsTask } from '../tasks/typescript'
 import { ResolvedConfig } from '../config'
-import { createDebugger } from '../utils'
+import { createDebugger, emptyTask } from '../utils'
 import { execute } from '../tasks'
 import { lessTask } from '../tasks/less'
 import { wxmlDistTask, wxmlTask } from '../tasks/wxml'
@@ -11,6 +11,7 @@ import { wxsTask } from '../tasks/wxs'
 import { NPM_SOURCE } from '../constants'
 import { npmTask } from '../tasks/npm'
 import { imageTask } from '../tasks/image'
+import { routerTask } from '../tasks/router'
 import { createServer, EinfaltDevServer } from './index'
 
 export const debugHmr = createDebugger('einfalt:hmr')
@@ -47,6 +48,10 @@ export async function handleHMRUpdate(
   await updateModules(file, server.config)
 }
 
+function pathToGlob(file: string) {
+  return `${path.dirname(file)}/*${path.extname(file)}`
+}
+
 export async function updateModules(file: string, config: ResolvedConfig) {
   const extname = path.extname(file)
   if (file.includes(NPM_SOURCE)) {
@@ -54,26 +59,32 @@ export async function updateModules(file: string, config: ResolvedConfig) {
   } else if (file.includes('src')) {
     switch (extname) {
       case '.ts':
-        await execute([tsTask(config, `${path.dirname(file)}/*.ts`)])
+        await execute([
+          routerTask(config),
+          tsTask(config, pathToGlob(file))
+        ])
         break
       case '.less':
-        await execute([lessTask(config, `${path.dirname(file)}/*.less`)])
+        await execute([
+          lessTask(config, pathToGlob(file))
+        ])
         break
       case '.wxml':
         await execute([
-          wxmlTask(config, `${path.dirname(file)}/*.wxml`),
+          config.router ? routerTask(config) : emptyTask,
+          wxmlTask(config, pathToGlob(file)),
           wxmlDistTask(config, file.replace('src', config.build.outDir)),
-          jsonDistTask(config, `${path.dirname(file.replace('src', config.build.outDir))}/*.json`)
+          jsonDistTask(config, pathToGlob(file.replace('src', config.build.outDir)))
         ])
         break
       case '.wxs':
         await execute([
-          wxsTask(config, `${path.dirname(file)}/*.wxs`)
+          wxsTask(config, pathToGlob(file))
         ])
         break
       case '.json':
         await execute([
-          jsonTask(config, `${path.dirname(file)}/*.json`),
+          jsonTask(config, pathToGlob(file)),
           jsonDistTask(config, file.replace('src', config.build.outDir))
         ])
         break

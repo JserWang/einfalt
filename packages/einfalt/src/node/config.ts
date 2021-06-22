@@ -45,6 +45,10 @@ export interface UserConfig {
    */
   mode?: string
   /**
+   * 指定router路径
+   */
+  router?: string
+  /**
    * Define global variable replacements.
    * Entries will be defined on `window` during dev and replaced during build.
    */
