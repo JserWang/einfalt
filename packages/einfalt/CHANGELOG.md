@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/JserWang/einfalt/compare/v1.0.2...v1.0.3) (2021-06-22)
+
+
+### Bug Fixes
+
+* **hmr:** wxml changed json doesn't run alias ([dca21be](https://github.com/JserWang/einfalt/commit/dca21be98b6598caba50eaf3c3a14ca7b6e6919f))
+
+
+
 ## [1.0.2](https://github.com/JserWang/einfalt/compare/v1.0.1...v1.0.2) (2021-06-22)
 
 
