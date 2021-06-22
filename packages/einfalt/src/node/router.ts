@@ -7,8 +7,6 @@ import { parsePath } from './utils'
 import { ResolvedConfig } from './config'
 import { ResolvedRouteRecord } from './plugins/router'
 
-export interface RouteMeta extends Record<string | number | symbol, unknown> {}
-
 interface ListItem {
   name: string
   pathName: string
