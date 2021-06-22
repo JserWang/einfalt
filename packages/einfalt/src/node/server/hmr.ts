@@ -52,6 +52,14 @@ function pathToGlob(file: string) {
   return `${path.dirname(file)}/*${path.extname(file)}`
 }
 
+function source2Dist(file: string, config: ResolvedConfig) {
+  return file.replace('src', config.build.outDir)
+}
+
+function renameExtname(file: string, extname: string) {
+  return file.replace(path.extname(file), extname)
+}
+
 export async function updateModules(file: string, config: ResolvedConfig) {
   const extname = path.extname(file)
   if (file.includes(NPM_SOURCE)) {
@@ -73,8 +81,13 @@ export async function updateModules(file: string, config: ResolvedConfig) {
         await execute([
           config.router ? routerTask(config) : emptyTask,
           wxmlTask(config, pathToGlob(file)),
-          wxmlDistTask(config, file.replace('src', config.build.outDir)),
-          jsonDistTask(config, pathToGlob(file.replace('src', config.build.outDir)))
+          wxmlDistTask(config, source2Dist(file, config)),
+          jsonDistTask(
+            config,
+            pathToGlob(
+              renameExtname(source2Dist(file, config), '.json')
+            )
+          )
         ])
         break
       case '.wxs':
@@ -85,7 +98,7 @@ export async function updateModules(file: string, config: ResolvedConfig) {
       case '.json':
         await execute([
           jsonTask(config, pathToGlob(file)),
-          jsonDistTask(config, file.replace('src', config.build.outDir))
+          jsonDistTask(config, source2Dist(file, config))
         ])
         break
       default:
