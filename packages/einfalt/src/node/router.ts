@@ -87,8 +87,8 @@ export function resolveAppJson(routes: RouteRecord[], config: ResolvedConfig): R
   return result
 }
 
-function stringifyQuery(query?: string[]) {
-  return query ? `&${query.join('&')}` : ''
+function stringifyQuery(query?: string | string[]) {
+  return Array.isArray(query) ? `&${query.join('&')}` : `&${query}`
 }
 
 function getParamsLength(query?: string) {
