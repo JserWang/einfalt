@@ -3,11 +3,10 @@ import gulp from 'gulp'
 import ts from 'gulp-typescript'
 import chalk from 'chalk'
 // @ts-ignore
-import inject from 'gulp-inject-string'
 import { ResolvedConfig } from '../config'
 import alias from '../plugins/alias'
 import define from '../plugins/define'
-import { resolveAppendAdditional, resolvePrependAdditional } from '../utils'
+import inject from '../plugins/inject'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build typescript ') + chalk.dim('start'), {
@@ -19,8 +18,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   return gulp
     // 指定编译目录
     .src([source, ...config.build.ignore], { nodir: true })
-    .pipe(inject.prepend(resolvePrependAdditional(config, 'ts')))
-    .pipe(inject.append(resolveAppendAdditional(config, 'ts')))
+    .pipe(inject(config))
     .pipe(tsProject())
     .on('error', (err: string) => {
       hasError = true

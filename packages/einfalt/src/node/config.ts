@@ -19,6 +19,18 @@ export interface ConfigEnv {
   mode: string
 }
 
+interface Additional {
+  [file: string]: {
+    content: string
+    includes?: RegExp | RegExp[]
+  }
+}
+
+interface AdditionalOption {
+  prepend?: Additional
+  append?: Additional
+}
+
 export interface UserConfig {
   /**
    * Project root directory. Can be an absolute path, or a path relative from
@@ -84,14 +96,7 @@ export interface UserConfig {
    */
   envDir?: string
 
-  additional?: {
-    prepend?: {
-      [file: string]: string
-    }
-    append?: {
-      [file: string]: string
-    }
-  }
+  additional?: AdditionalOption
 }
 
 export type UserConfigFn = (env: ConfigEnv) => UserConfig | Promise<UserConfig>

@@ -1,12 +1,10 @@
 import { dirname } from 'path'
 import gulp from 'gulp'
-// @ts-ignore
-import inject from 'gulp-inject-string'
 import chalk from 'chalk'
 import { ResolvedConfig } from '../config'
 import components from '../plugins/components'
 import wxml from '../plugins/wxml'
-import { resolveAppendAdditional, resolvePrependAdditional } from '../utils'
+import inject from '../plugins/inject'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build wxml ') + chalk.dim('start'), {
@@ -16,8 +14,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   return gulp
     // 指定编译目录
     .src([source, ...config.build.ignore], { nodir: true })
-    .pipe(inject.append(resolveAppendAdditional(config, 'wxml')))
-    .pipe(inject.prepend(resolvePrependAdditional(config, 'wxml')))
+    .pipe(inject(config))
     .pipe(wxml())
     .on('end', () => {
       config.logger.info(chalk.green('build wxml ') + chalk.dim('finished'), {

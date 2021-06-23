@@ -2,10 +2,9 @@ import { dirname } from 'path'
 import gulp from 'gulp'
 import chalk from 'chalk'
 // @ts-ignore
-import inject from 'gulp-inject-string'
 import { ResolvedConfig } from '../config'
 import alias from '../plugins/alias'
-import { resolveAppendAdditional, resolvePrependAdditional } from '../utils'
+import inject from '../plugins/inject'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build json ') + chalk.dim('start'), {
@@ -15,8 +14,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   return gulp
     // 指定编译目录
     .src([source, ...config.build.ignore], { nodir: true })
-    .pipe(inject.append(resolveAppendAdditional(config, 'json')))
-    .pipe(inject.prepend(resolvePrependAdditional(config, 'json')))
+    .pipe(inject(config))
     .on('end', () => {
       config.logger.info(chalk.green('build json ') + chalk.dim('finished'), {
         timestamp: true

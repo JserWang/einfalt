@@ -15,7 +15,6 @@ import debug from 'debug'
 import chalk from 'chalk'
 import gulp from 'gulp'
 import { FS_PREFIX } from './constants'
-import { ResolvedConfig } from './config'
 
 export const emptyTask: gulp.TaskFunction = (done) => { done && done() }
 
@@ -215,16 +214,11 @@ export function transformIgnore(ignore?: string[]) {
   return ignore?.map(item => `!${item}`) || []
 }
 
-export function resolvePrependAdditional(config: ResolvedConfig, extname: string) {
-  if (config.additional?.prepend && config.additional?.prepend[extname]) {
-    return config.additional?.prepend[extname]
+export const isMatched = (target: string, reg?: RegExp | RegExp[]): boolean => {
+  if (Array.isArray(reg)) {
+    return reg.length > 0 ? reg.some(item => item.test(target)) : false
+  } else if (reg) {
+    return reg.test(target)
   }
-  return ''
-}
-
-export function resolveAppendAdditional(config: ResolvedConfig, extname: string) {
-  if (config.additional?.append && config.additional?.append[extname]) {
-    return config.additional?.append[extname]
-  }
-  return ''
+  return false
 }

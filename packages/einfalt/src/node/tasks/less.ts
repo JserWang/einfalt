@@ -4,13 +4,10 @@ import gulp from 'gulp'
 import less from 'gulp-less'
 // @ts-ignore
 import px2rpx from 'gulp-px2rpx'
-// @ts-ignore
 import rename from 'gulp-rename'
-// @ts-ignore
-import inject from 'gulp-inject-string'
 import chalk from 'chalk'
 import { ResolvedConfig } from '../config'
-import { resolveAppendAdditional, resolvePrependAdditional } from '../utils'
+import inject from '../plugins/inject'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build less ') + chalk.dim('start'), {
@@ -20,10 +17,9 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   let hasError = false
   return gulp
     // 指定编译目录
-    .src([source, ...config.build.ignore], { nodir: true })
-    .pipe(inject.append(resolveAppendAdditional(config, 'less')))
-    .pipe(inject.prepend(resolvePrependAdditional(config, 'less')))
-    .pipe(less({ allowEmpty: true }))
+    .src([source, ...config.build.ignore], { nodir: true, allowEmpty: true })
+    .pipe(inject(config))
+    .pipe(less())
     .on('error', (err: string) => {
       hasError = true
       config.logger.error(err, {
