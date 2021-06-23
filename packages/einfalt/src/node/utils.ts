@@ -222,3 +222,7 @@ export const isMatched = (target: string, reg?: RegExp | RegExp[]): boolean => {
   }
   return false
 }
+
+export function pathToGlob(file?: string) {
+  return file ? `${dirname(file)}/*${extname(file)}` : ''
+}

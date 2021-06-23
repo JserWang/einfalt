@@ -7,6 +7,7 @@ import { ResolvedConfig } from '../config'
 import alias from '../plugins/alias'
 import define from '../plugins/define'
 import inject from '../plugins/inject'
+import { pathToGlob } from '../utils'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build typescript ') + chalk.dim('start'), {
@@ -17,7 +18,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   let hasError = false
   return gulp
     // 指定编译目录
-    .src([source, ...config.build.ignore], { nodir: true })
+    .src([source, ...config.build.ignore, `!${pathToGlob(config.router)}`], { nodir: true })
     .pipe(inject(config))
     .pipe(tsProject())
     .on('error', (err: string) => {

@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import { TaskFunction } from 'gulp'
 import { tsTask } from '../tasks/typescript'
 import { ResolvedConfig } from '../config'
-import { createDebugger } from '../utils'
+import { createDebugger, pathToGlob } from '../utils'
 import { execute } from '../tasks'
 import { lessTask } from '../tasks/less'
 import { wxmlDistTask, wxmlTask } from '../tasks/wxml'
@@ -51,10 +51,6 @@ export async function handleHMRUpdate(
   await updateModules(file, server.config)
 }
 
-function pathToGlob(file: string) {
-  return `${path.dirname(file)}/*${path.extname(file)}`
-}
-
 function source2Dist(file: string, config: ResolvedConfig) {
   return file.replace('src', config.build.outDir)
 }
@@ -66,13 +62,11 @@ function renameExtname(file: string, extname: string) {
 function getModuleProcessor(config: ResolvedConfig, file: string): Record<string, () => TaskFunction[]> {
   return {
     '.ts': () => {
-      const tasks: TaskFunction[] = []
       if (config.router && file.includes(config.router)) {
-        tasks.push(routerTask(config))
+        return [routerTask(config)]
       }
 
-      tasks.push(tsTask(config, pathToGlob(file)))
-      return tasks
+      return [tsTask(config, pathToGlob(file))]
     },
     '.less': () => [lessTask(config, pathToGlob(file))],
     '.wxml': () => {
