@@ -1,3 +1,17 @@
+## [1.0.4](https://github.com/JserWang/einfalt/compare/v1.0.3...v1.0.4) (2021-06-23)
+
+
+### Bug Fixes
+
+* **router-task:** change router source to config.router ([0260c1a](https://github.com/JserWang/einfalt/commit/0260c1a02cec27bd860f57f8d6331a76009b6b43))
+
+
+### Features
+
+* **inject-plugin:** add 'includes' to control additional code ([d66d5a4](https://github.com/JserWang/einfalt/commit/d66d5a42bb1d74c9b9e54172f8e9089c015bd0fc))
+
+
+
 ## [1.0.3](https://github.com/JserWang/einfalt/compare/v1.0.2...v1.0.3) (2021-06-22)
 
 
