@@ -1,3 +1,12 @@
+## [1.0.5](https://github.com/JserWang/einfalt/compare/v1.0.4...v1.0.5) (2021-06-23)
+
+
+### Bug Fixes
+
+* **hmr:** split router & ts task ([f27d09d](https://github.com/JserWang/einfalt/commit/f27d09d3eec2ba361eb476909c4c11e2ba4ebbee))
+
+
+
 ## [1.0.4](https://github.com/JserWang/einfalt/compare/v1.0.3...v1.0.4) (2021-06-23)
 
 
