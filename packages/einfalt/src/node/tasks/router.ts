@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
 import gulp from 'gulp'
 import ts from 'gulp-typescript'
 import chalk from 'chalk'
@@ -15,7 +15,7 @@ function build(config: ResolvedConfig) {
   let hasError = false
   return gulp
     // 指定编译目录
-    .src(['src/router/index.ts', ...config.build.ignore], { nodir: true })
+    .src([config.router!, ...config.build.ignore], { nodir: true })
     .pipe(router(config))
     .pipe(tsProject())
     .on('error', (err: string) => {
@@ -33,7 +33,9 @@ function build(config: ResolvedConfig) {
         })
       }
     })
-    .pipe(gulp.dest(`${config.build.outDir}/router`))
+    .pipe(gulp.dest(
+      dirname(config.router!.replace('src', config.build.outDir))
+    ))
 }
 
 export function routerTask(config: ResolvedConfig) {
