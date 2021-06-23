@@ -19,14 +19,14 @@ export interface ConfigEnv {
   mode: string
 }
 
-interface Additional {
+export interface Additional {
   [file: string]: {
     content: string
     includes?: RegExp | RegExp[]
   }
 }
 
-interface AdditionalOption {
+export interface AdditionalOption {
   prepend?: Additional
   append?: Additional
 }
