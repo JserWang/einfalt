@@ -1,7 +1,7 @@
 import { join, resolve } from 'path'
 import glob from 'fast-glob'
 import { StringUtils } from 'turbocommons-ts'
-import { createFileSync, readJsonSync, writeJsonSync } from 'fs-extra'
+import { existsSync, createFileSync, readJsonSync, writeJsonSync } from 'fs-extra'
 import { RouteRecord } from '@einfalt/router'
 import { parsePath } from './utils'
 import { ResolvedConfig } from './config'
@@ -21,6 +21,14 @@ export interface ResolvedAppJson {
     root?: string
     pages: string[]
   }[]
+}
+
+export interface ProjectPrivateConfigJson {
+  condition: {
+    miniprogram: {
+      list: ListItem[]
+    }
+  }
 }
 
 const SUBPACKAGE_PREFIX = 'package'
@@ -104,16 +112,29 @@ function transformRoute(route: ResolvedRouteRecord): ListItem {
   }
 }
 
+function initProjectPrivateConfig(): ProjectPrivateConfigJson {
+  return {
+    condition: {
+      miniprogram: {
+        list: []
+      }
+    }
+  }
+}
+
 /**
- * 根据传入pages修改project.private.config.json
+ * 根据传入pages生成或修改project.private.config.json
  * @param config
  * @param routes
  */
 export function writePrivateConfig(config: ResolvedConfig, routes: ResolvedRouteRecord[]) {
   const privateJsonPath = resolve(config.root, 'project.private.config.json')
-  const json = readJsonSync(privateJsonPath) || {}
-  if (Object.keys(json).length === 0) {
+  let json: ProjectPrivateConfigJson = initProjectPrivateConfig()
+
+  if (!existsSync(privateJsonPath)) {
     createFileSync(privateJsonPath)
+  } else {
+    json = readJsonSync(privateJsonPath)
   }
 
   const originList: ListItem[] = json.condition.miniprogram.list
