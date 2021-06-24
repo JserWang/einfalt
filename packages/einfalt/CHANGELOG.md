@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/JserWang/einfalt/compare/v1.0.5...v1.0.6) (2021-06-24)
+
+
+### Features
+
+* **router-task:** create 'project.private.config.json' if not exists ([1eb3e1c](https://github.com/JserWang/einfalt/commit/1eb3e1caa71e63932252f095ff89bc415d819721))
+
+
+
 ## [1.0.5](https://github.com/JserWang/einfalt/compare/v1.0.4...v1.0.5) (2021-06-23)
 
 
