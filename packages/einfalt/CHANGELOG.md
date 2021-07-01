@@ -1,3 +1,12 @@
+## [1.0.7](https://github.com/JserWang/einfalt/compare/v1.0.6...v1.0.7) (2021-07-01)
+
+
+### Bug Fixes
+
+* **config:** `dotExpand` should after get the whole env ([53e3629](https://github.com/JserWang/einfalt/commit/53e36298778f34dffda317ef149d4816b339124c))
+
+
+
 ## [1.0.6](https://github.com/JserWang/einfalt/compare/v1.0.5...v1.0.6) (2021-06-24)
 
 
