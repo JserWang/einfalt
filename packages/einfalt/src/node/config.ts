@@ -536,13 +536,6 @@ export function loadEnv(
         debug: !!process.env.DEBUG || undefined
       })
 
-      // let environment variables use each other
-      dotenvExpand({
-        parsed,
-        // prevent process.env mutation
-        ignoreProcessEnv: true
-      } as any)
-
       // only keys that start with prefix are exposed to client
       for (const [key, value] of Object.entries(parsed)) {
         if (key.startsWith(prefix) && env[key] === undefined) {
@@ -551,6 +544,13 @@ export function loadEnv(
       }
     }
   }
+
+  // let environment variables use each other
+  dotenvExpand({
+    parsed: env,
+    // prevent process.env mutation
+    ignoreProcessEnv: true
+  } as any)
 
   return env
 }
