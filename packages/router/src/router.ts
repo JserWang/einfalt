@@ -212,14 +212,14 @@ export function createRouter(this: any, options: RouterOptions): Router {
         // 根据类型调用history的跳转方法
         let toIndex = currentStackLength
         let params = {}
-        if (typeof to !== 'string' && to.replace) {
-          method = routerHistory.replace
-          toIndex = currentIndex
-        } else if (typeof to !== 'string' && to.reLaunch) {
+        if (typeof to !== 'string' && to.reLaunch) {
           method = routerHistory.reLaunch
           toIndex = 0
         } else if (toRoute.meta?.isTab) {
           method = routerHistory.switchTab
+          toIndex = currentIndex
+        } else if (typeof to !== 'string' && to.replace) {
+          method = routerHistory.replace
           toIndex = currentIndex
         } else {
           params = { events: (to as any).events }
