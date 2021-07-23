@@ -1,6 +1,6 @@
 {
   "name": "@einfalt/router",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "author": "JserWang <jserwang@gmail.com> (https://github.com/JserWang)",
   "main": "dist/einfalt-router.cjs.js",
