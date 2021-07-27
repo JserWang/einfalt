@@ -1,3 +1,17 @@
+## [1.0.8](https://github.com/JserWang/einfalt/compare/v1.0.7...v1.0.8) (2021-07-27)
+
+
+### Bug Fixes
+
+* prevent crash when editing wxml ([4597330](https://github.com/JserWang/einfalt/commit/4597330eb5899063f29cb6e8e629a7fe696a5c2f))
+
+
+### Features
+
+* **inject:** add excludes option ([2eeb930](https://github.com/JserWang/einfalt/commit/2eeb930af02072f5777557f19c0d33432dc2a39a))
+
+
+
 ## [1.0.7](https://github.com/JserWang/einfalt/compare/v1.0.6...v1.0.7) (2021-07-01)
 
 
