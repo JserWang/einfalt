@@ -23,6 +23,7 @@ export interface Additional {
   [file: string]: {
     content: string
     includes?: RegExp | RegExp[]
+    excludes?: RegExp | RegExp[]
   }
 }
 
