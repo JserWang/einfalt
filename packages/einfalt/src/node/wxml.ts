@@ -1,8 +1,10 @@
 import { readFileSync } from 'fs'
 import { parse as parseXml } from 'fast-xml-parser'
 import yaml from 'yaml'
+import chalk from 'chalk'
 import { ATTR_KEY } from './constants'
 import { md5 } from './utils'
+import { createLogger } from './logger'
 
 const routeBlockRE = /<route(.*)>((.*)(\n))*<\/route>/g
 
@@ -14,13 +16,21 @@ export function parse(code: string) {
     return parsedMap.get(cryptoCode)
   }
 
-  const parsedFile = parseXml(String(code), {
-    attrNodeName: ATTR_KEY,
-    attributeNamePrefix: '',
-    ignoreAttributes: false
-  })
+  let parsedFile = ''
+  try {
+    parsedFile = parseXml(String(code), {
+      attrNodeName: ATTR_KEY,
+      attributeNamePrefix: '',
+      ignoreAttributes: false
+    })
 
-  parsedMap.set(cryptoCode, parsedFile)
+    parsedMap.set(cryptoCode, parsedFile)
+  } catch (e) {
+    createLogger().error(
+      chalk.red(`error when starting dev server:\n${e.stack}`)
+    )
+  }
+
   return parsedFile
 }
 
