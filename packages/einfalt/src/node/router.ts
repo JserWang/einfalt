@@ -177,7 +177,7 @@ export function getFileSystemRoutes(config: ResolvedConfig): RouteRecord[] {
   const pathMap: { [packageName: string]: string[] } = {}
   // TODO: 根据不同平台取不同平台的文件路径
   glob
-    .sync(['**/index.wxml', '!components'], {
+    .sync(['**/index.wxml', '!components/**', '!custom-tab-bar'], {
       cwd: join(config.root, 'src')
     })
     .forEach((file) => {
