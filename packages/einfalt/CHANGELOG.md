@@ -1,3 +1,12 @@
+## [1.0.10](https://github.com/JserWang/einfalt/compare/v1.0.9...v1.0.10) (2021-07-28)
+
+
+### Bug Fixes
+
+* ignore page's components from file system route ([4d93de9](https://github.com/JserWang/einfalt/commit/4d93de96bce1fa023ce19b59eb0abbbfd8a31011))
+
+
+
 ## [1.0.9](https://github.com/JserWang/einfalt/compare/v1.0.8...v1.0.9) (2021-07-28)
 
 
