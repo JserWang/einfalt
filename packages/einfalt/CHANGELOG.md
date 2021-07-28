@@ -1,3 +1,12 @@
+## [1.0.9](https://github.com/JserWang/einfalt/compare/v1.0.8...v1.0.9) (2021-07-28)
+
+
+### Bug Fixes
+
+* ignore page's components & custom-tab-bar from file system route ([37c87ca](https://github.com/JserWang/einfalt/commit/37c87ca6c696f5146eefd7c34feb3eed38eaca73))
+
+
+
 ## [1.0.8](https://github.com/JserWang/einfalt/compare/v1.0.7...v1.0.8) (2021-07-27)
 
 
