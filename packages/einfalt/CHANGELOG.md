@@ -1,3 +1,12 @@
+## [1.0.11](https://github.com/JserWang/einfalt/compare/v1.0.10...v1.0.11) (2021-08-11)
+
+
+### Bug Fixes
+
+* tsTask should just ignore router/index.ts ([c80e268](https://github.com/JserWang/einfalt/commit/c80e26803876a5471c5599a7b8f9187744bed262))
+
+
+
 ## [1.0.10](https://github.com/JserWang/einfalt/compare/v1.0.9...v1.0.10) (2021-07-28)
 
 
