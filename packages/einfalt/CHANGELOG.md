@@ -1,3 +1,12 @@
+## [1.0.12](https://github.com/JserWang/einfalt/compare/v1.0.11...v1.0.12) (2021-08-12)
+
+
+### Bug Fixes
+
+* `private.project.config.json` query stringify error ([1db187c](https://github.com/JserWang/einfalt/commit/1db187c4aeb51e71a29ad507a3b2697884a2d546))
+
+
+
 ## [1.0.11](https://github.com/JserWang/einfalt/compare/v1.0.10...v1.0.11) (2021-08-11)
 
 
