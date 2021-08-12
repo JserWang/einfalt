@@ -96,11 +96,16 @@ export function resolveAppJson(routes: RouteRecord[], config: ResolvedConfig): R
 }
 
 function stringifyQuery(query?: string | string[]) {
-  return Array.isArray(query) ? `&${query.join('&')}` : `&${query}`
+  if (Array.isArray(query)) {
+    return `&${query.join('&')}`
+  } else if (query) {
+    return `&${query}`
+  }
+  return ''
 }
 
 function getParamsLength(query?: string) {
-  return query ? query.split('&').length : 0
+  return query ? query.split('&').filter(item => !!item).length : 0
 }
 
 function transformRoute(route: ResolvedRouteRecord): ListItem {
@@ -145,25 +150,22 @@ export function writePrivateConfig(config: ResolvedConfig, routes: ResolvedRoute
 
   const result: ListItem[] = []
   routes.forEach((route) => {
+    // 处理分包
     if (route.root && route.children) {
       route.children.forEach((child) => {
-        const originItem = getOriginItem(child.name!)
-        if (!originItem || getParamsLength(originItem.query) !== (child.params?.length || 0) + 1) {
-          const transformed = transformRoute(child)
-          result.push(transformed)
-        } else {
-          result.push(originItem)
+        let routeItem = getOriginItem(child.name!)
+        if (!routeItem || getParamsLength(routeItem.query) !== (child.params?.length || 0) + 1) {
+          routeItem = transformRoute(child)
         }
+        result.push(routeItem)
       })
     } else {
-      const originItem = getOriginItem(route.name!)
+      let routeItem = getOriginItem(route.name!)
       // 这里 + 1 是因为transform后会默认拼上scene参数
-      if (!originItem || getParamsLength(originItem.query) !== (route.params?.length || 0) + 1) {
-        const transformed = transformRoute(route)
-        result.push(transformed)
-      } else {
-        result.push(originItem)
+      if (!routeItem || getParamsLength(routeItem.query) !== (route.params?.length || 0) + 1) {
+        routeItem = transformRoute(route)
       }
+      result.push(routeItem)
     }
   })
 
