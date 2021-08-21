@@ -8,7 +8,7 @@ function build(config: ResolvedConfig) {
   })
   return gulp
     // 指定编译目录
-    .src('src/**/*.{gif,jpg,jpeg,png,svg}')
+    .src('src/**/*.{gif,jpg,jpeg,png,svg,webp}')
     .on('end', () => {
       config.logger.info(chalk.green('copy images ') + chalk.dim('finished'), {
         timestamp: true
