@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/JserWang/einfalt/compare/v1.0.12...v1.1.0) (2021-08-21)
+
+
+### Features
+
+* add spacing plugin to generate spacing.less ([777d114](https://github.com/JserWang/einfalt/commit/777d11442eec6294e549e61da49c14684965984c))
+* support webp ([3492ec6](https://github.com/JserWang/einfalt/commit/3492ec65b38adbb6d3803c4ca0d0ef4fb3ed3586))
+
+
+
 ## [1.0.12](https://github.com/JserWang/einfalt/compare/v1.0.11...v1.0.12) (2021-08-12)
 
 
