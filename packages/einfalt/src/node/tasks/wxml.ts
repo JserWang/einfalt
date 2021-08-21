@@ -5,6 +5,7 @@ import { ResolvedConfig } from '../config'
 import components from '../plugins/components'
 import wxml from '../plugins/wxml'
 import inject from '../plugins/inject'
+import spacing from '../plugins/spacing'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build wxml ') + chalk.dim('start'), {
@@ -16,6 +17,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
     .src([source, ...config.build.ignore], { nodir: true })
     .pipe(inject(config))
     .pipe(wxml())
+    .pipe(spacing(config.resolve?.spacing))
     .on('end', () => {
       config.logger.info(chalk.green('build wxml ') + chalk.dim('finished'), {
         timestamp: true

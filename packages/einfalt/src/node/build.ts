@@ -83,11 +83,16 @@ export async function doBuild(inlineConfig: InlineConfig = {}) {
 
   prepareOutDir(outDir, options.emptyOutDir, config)
 
+  const spacingPath = config.resolve?.spacing?.path
+  if (spacingPath && existsSync(spacingPath)) {
+    rmSync(spacingPath)
+  }
+
   await execute([
     tsTask(config),
     config.router ? routerTask(config) : emptyTask,
-    lessTask(config),
     wxmlTask(config),
+    lessTask(config),
     jsonTask(config),
     wxmlDistTask(config),
     jsonDistTask(config),

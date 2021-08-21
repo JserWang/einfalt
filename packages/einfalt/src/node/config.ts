@@ -11,6 +11,7 @@ import { createLogger, Logger, LogLevel } from './logger'
 import { BuildOptions, resolveBuildOptions, ResolvedBuildOptions } from './build'
 import { ComponentsOptions } from './plugins/components'
 import { ServerOptions } from './server'
+import { SpacingOptions } from './plugins/spacing'
 
 const debug = createDebugger('einfalt:config')
 
@@ -72,6 +73,7 @@ export interface UserConfig {
   resolve?: {
     alias?: AliasOptions
     components?: ComponentsOptions
+    spacing?: SpacingOptions
   }
   /**
    * Server specific options, e.g. host, port, https...

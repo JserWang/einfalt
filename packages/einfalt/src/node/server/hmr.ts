@@ -68,7 +68,7 @@ function getModuleProcessor(config: ResolvedConfig, file: string): Record<string
 
       return [tsTask(config, pathToGlob(file))]
     },
-    '.less': () => [lessTask(config, pathToGlob(file))],
+    '.less': () => [lessTask(config, pathToGlob(file)), lessTask(config, 'src/app.less')],
     '.wxml': () => {
       const tasks: TaskFunction[] = []
       const code = String(readFileSync(file))
