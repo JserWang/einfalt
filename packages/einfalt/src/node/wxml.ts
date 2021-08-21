@@ -52,7 +52,7 @@ export function resolveRouteBlock(path: string) {
  * 移除路由代码块
  * @param code
  */
-export function clearRouteBlock(code: string): string {
+export function removeRouteBlock(code: string): string {
   return code.replace(routeBlockRE, '')
 }
 

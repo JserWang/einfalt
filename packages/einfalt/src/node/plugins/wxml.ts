@@ -1,7 +1,7 @@
 import { Transform, TransformCallback } from 'stream'
 import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
-import { clearRouteBlock, hasRouteBlock } from '../wxml'
+import { removeRouteBlock, hasRouteBlock } from '../wxml'
 
 export default function(): Transform {
   return new Transform({
@@ -22,8 +22,8 @@ export default function(): Transform {
         return callback(null, chunk)
       }
 
-      // 存在route block则清空
-      code = clearRouteBlock(code)
+      // 存在route block则移除
+      code = removeRouteBlock(code)
       chunk.contents = Buffer.from(code)
 
       callback(null, chunk)
