@@ -30,10 +30,10 @@ const SPACING_PREFIX = [
 ]
 
 function formatString(str = '') {
-  return str.replaceAll('\'', '')
-    .replaceAll('\"', '')
-    .replaceAll('\{', '')
-    .replaceAll('\}', '')
+  return str.replace(/'/g, '')
+    .replace(/"/g, '')
+    .replace(/{/g, '')
+    .replace(/}/g, '')
 }
 
 function getSpacingClass(tagName: string, className: string): string[] {
