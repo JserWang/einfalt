@@ -75,6 +75,7 @@ export default function(options?: AliasOptions): Transform {
 
       let relativePath = path.posix.relative(chunk.dirname, path.resolve(process.cwd(), matchedEntry.replacement))
       relativePath = relativePath.endsWith('..') ? `${relativePath}/` : relativePath
+      relativePath = relativePath === '' ? './' : relativePath
 
       code = code.replace(new RegExp(matchedEntry.find, 'g'), relativePath)
 
