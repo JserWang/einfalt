@@ -5,6 +5,7 @@ import { existsSync, unlinkSync } from 'fs'
 import connect, { Server } from 'connect'
 import chokidar, { FSWatcher } from 'chokidar'
 import chalk from 'chalk'
+import { readJsonSync, writeJsonSync } from 'fs-extra'
 import { InlineConfig, resolveConfig, ResolvedConfig } from '../config'
 import { normalizePath, resolveHostname } from '../utils'
 import { printServerUrls } from '../logger'
@@ -63,7 +64,9 @@ export interface ServerOptions {
 
 export async function createServer(inlineConfig: InlineConfig) {
   const config = await resolveConfig(inlineConfig, 'serve', 'development')
-  const { root, server: serverConfig } = config
+  const { root, server: serverConfig, env } = config
+
+  writeAppIdToConfigJson(root, env.EF_APP_ID)
 
   const middlewares = connect() as Server
 
@@ -274,4 +277,19 @@ function createServerCloseFn(server: http.Server | null) {
         resolve()
       }
     })
+}
+
+/**
+ * 将AppId写入 project.config.json中
+ * @param root
+ * @param appId
+ */
+function writeAppIdToConfigJson(root: string, appId: string) {
+  if (!appId) {
+    return
+  }
+  const jsonFile = path.resolve(root, 'project.config.json')
+  const json = readJsonSync(jsonFile)
+  json.appid = appId
+  writeJsonSync(jsonFile, json, { spaces: 2 })
 }
