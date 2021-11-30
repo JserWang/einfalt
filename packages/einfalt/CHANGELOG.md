@@ -1,3 +1,17 @@
+## [1.1.1](https://github.com/JserWang/einfalt/compare/v1.1.0...v1.1.1) (2021-11-30)
+
+
+### Bug Fixes
+
+* **alias:** relative path is empty. ([f575355](https://github.com/JserWang/einfalt/commit/f575355fb2a1b82262bcedf992acb53647d6724e))
+
+
+### Features
+
+* auto write appid to project.config.json ([accce03](https://github.com/JserWang/einfalt/commit/accce03ece5e78a507eb1466055f048342ef3e6c))
+
+
+
 # [1.1.0](https://github.com/JserWang/einfalt/compare/v1.0.12...v1.1.0) (2021-08-21)
 
 
