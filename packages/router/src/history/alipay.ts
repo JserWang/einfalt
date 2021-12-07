@@ -48,7 +48,7 @@ export function createAlipayHistory(): RouterHistory {
   }
 
   function getParams(key: string) {
-    return my.getStorageSync({ key })
+    return my.getStorageSync({ key }).data
   }
 
   function removeParams(key: string) {
