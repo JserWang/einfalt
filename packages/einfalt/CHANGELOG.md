@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/JserWang/einfalt/compare/v1.1.1...v1.2.0) (2022-01-25)
+
+
+### Features
+
+* add entry ([bb0fcda](https://github.com/JserWang/einfalt/commit/bb0fcda513b8d4da256805d1678fc2762aa257d3))
+
+
+
 ## [1.1.1](https://github.com/JserWang/einfalt/compare/v1.1.0...v1.1.1) (2021-11-30)
 
 
