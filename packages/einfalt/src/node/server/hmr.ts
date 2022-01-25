@@ -52,7 +52,7 @@ export async function handleHMRUpdate(
 }
 
 function source2Dist(file: string, config: ResolvedConfig) {
-  return file.replace('src', config.build.outDir)
+  return file.replace(config.entry, config.build.outDir)
 }
 
 function renameExtname(file: string, extname: string) {
@@ -62,7 +62,7 @@ function renameExtname(file: string, extname: string) {
 function getModuleProcessor(config: ResolvedConfig, file: string): Record<string, () => TaskFunction[]> {
   return {
     '.ts': () => {
-      if (config.router && file.includes(config.router)) {
+      if (config.paths?.router && file.includes(config.paths.router)) {
         return [routerTask(config)]
       }
 
@@ -72,7 +72,7 @@ function getModuleProcessor(config: ResolvedConfig, file: string): Record<string
     '.wxml': () => {
       const tasks: TaskFunction[] = []
       const code = String(readFileSync(file))
-      if (config.router && hasRouteBlock(code)) {
+      if (config.paths?.router && hasRouteBlock(code)) {
         tasks.push(routerTask(config))
       }
       tasks.push(
@@ -102,7 +102,8 @@ export async function updateModules(file: string, config: ResolvedConfig) {
   const extname = path.extname(file)
   if (file.includes(NPM_SOURCE)) {
     await execute([npmTask(config)])
-  } else if (file.includes('src')) {
+  } else if (file.includes(config.entry)) {
+    console.log('in')
     const processor = getModuleProcessor(config, file)
     if (processor[extname]) {
       return await execute(processor[extname]())

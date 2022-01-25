@@ -33,9 +33,9 @@ function processDist(config: ResolvedConfig, source: string, target?: string) {
 export function jsonTask(config: ResolvedConfig, source?: string) {
   let target = ''
   if (source) {
-    target = dirname(source.replace('src', config.build.outDir))
+    target = dirname(source.replace(config.entry, config.build.outDir))
   } else {
-    source = 'src/**/*.json'
+    source = `${config.entry}/**/*.json`
   }
   return () => build(config, source!, target)
 }

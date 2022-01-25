@@ -17,7 +17,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   let hasError = false
   return gulp
     // 指定编译目录
-    .src([source, ...config.build.ignore, `!${config.router}`], { nodir: true })
+    .src([source, ...config.build.ignore, `!${config.paths?.router}`], { nodir: true })
     .pipe(inject(config))
     .pipe(tsProject())
     .on('error', (err: string) => {
@@ -41,9 +41,9 @@ function build(config: ResolvedConfig, source: string, target?: string) {
 export function tsTask(config: ResolvedConfig, source?: string) {
   let target = ''
   if (source) {
-    target = dirname(source.replace('src', config.build.outDir))
+    target = dirname(source.replace(config.entry, config.build.outDir))
   } else {
-    source = 'src/**/*.ts'
+    source = `${config.entry}/**/*.ts`
   }
 
   return () => build(config, source!, target)

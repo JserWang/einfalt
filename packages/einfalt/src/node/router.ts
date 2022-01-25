@@ -85,9 +85,9 @@ export function resolveAppJson(routes: RouteRecord[], config: ResolvedConfig): R
   })
 
   // config.home配置页面默认在app.json的pages中第一位
-  if (config.home) {
+  if (config.paths?.home) {
     const { pages } = result
-    const homeIndex = pages.indexOf(config.home)
+    const homeIndex = pages.indexOf(config.paths.home)
     homeIndex > 0 && pages.unshift(pages[homeIndex])
     result.pages = Array.from(new Set([...pages]))
   }
@@ -180,7 +180,7 @@ export function getFileSystemRoutes(config: ResolvedConfig): RouteRecord[] {
   // TODO: 根据不同平台取不同平台的文件路径
   glob
     .sync(['**/index.wxml', '!components', '!**/components/**', '!custom-tab-bar'], {
-      cwd: join(config.root, 'src')
+      cwd: join(config.root, config.entry)
     })
     .forEach((file) => {
       const { dirname } = parsePath(file)

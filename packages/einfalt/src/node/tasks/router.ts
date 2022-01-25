@@ -15,7 +15,7 @@ function build(config: ResolvedConfig) {
   let hasError = false
   return gulp
     // 指定编译目录
-    .src([config.router!, ...config.build.ignore], { nodir: true })
+    .src([config.paths!.router!, ...config.build.ignore], { nodir: true })
     .pipe(router(config))
     .pipe(tsProject())
     .on('error', (err: string) => {
@@ -34,7 +34,7 @@ function build(config: ResolvedConfig) {
       }
     })
     .pipe(gulp.dest(
-      dirname(config.router!.replace('src', config.build.outDir))
+      dirname(config.paths!.router!.replace(config.entry, config.build.outDir))
     ))
 }
 

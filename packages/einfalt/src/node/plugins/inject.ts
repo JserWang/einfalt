@@ -4,16 +4,29 @@ import PluginError from 'plugin-error'
 import { ResolvedConfig } from '../config'
 import { isMatched } from '../utils'
 
+export interface Additional {
+  [file: string]: {
+    content: string
+    includes?: RegExp | RegExp[]
+    excludes?: RegExp | RegExp[]
+  }
+}
+
+export interface AdditionalOption {
+  prepend?: Additional
+  append?: Additional
+}
+
 function resolvePrependAdditional(config: ResolvedConfig, extname: string) {
-  if (config.additional!.prepend?.[extname]) {
-    return config.additional!.prepend[extname].content
+  if (config.resolve?.additional!.prepend?.[extname]) {
+    return config.resolve?.additional!.prepend[extname].content
   }
   return ''
 }
 
 function resolveAppendAdditional(config: ResolvedConfig, extname: string) {
-  if (config.additional!.append?.[extname]) {
-    return config.additional!.append[extname].content
+  if (config.resolve?.additional!.append?.[extname]) {
+    return config.resolve?.additional!.append[extname].content
   }
   return ''
 }
@@ -32,20 +45,21 @@ export default function(config: ResolvedConfig): Transform {
       }
 
       // 当不存在additional
-      if (!config.additional || Object.keys(config.additional).length === 0) {
+      if (!config.resolve?.additional || Object.keys(config.resolve?.additional).length === 0) {
         return callback(null, chunk)
       }
 
+      const additional = config.resolve?.additional
       let { extname } = chunk
       extname = extname.substr(1, extname.length - 1)
-      if (!config.additional.prepend?.[extname] && !config.additional.append?.[extname]) {
+      if (!additional.prepend?.[extname] && !additional.append?.[extname]) {
         return callback(null, chunk)
       }
 
       let prependData = ''
       let appendData = ''
-      const prependOption = config.additional.prepend?.[extname]
-      const appendOption = config.additional.append?.[extname]
+      const prependOption = additional.prepend?.[extname]
+      const appendOption = additional.append?.[extname]
 
       if (prependOption
         && (!prependOption.includes || isMatched(chunk.dirname, prependOption.includes))

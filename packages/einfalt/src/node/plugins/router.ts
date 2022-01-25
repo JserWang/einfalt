@@ -20,7 +20,7 @@ function resolveRoute(config: ResolvedConfig, routes: RouteRecord[]): ResolvedRo
   return routes.map((route) => {
     if (route.root && route.children) {
       route.children = route.children.map((child) => {
-        const { meta, params } = resolveRouteBlock(path.resolve(config.root, 'src', `${route.root}/${child.page}.wxml`))
+        const { meta, params } = resolveRouteBlock(path.resolve(config.root, config.entry, `${route.root}/${child.page}.wxml`))
         return {
           ...child,
           meta,
@@ -29,7 +29,7 @@ function resolveRoute(config: ResolvedConfig, routes: RouteRecord[]): ResolvedRo
       })
     }
     if (route.page) {
-      const { meta, params } = resolveRouteBlock(path.resolve(config.root, 'src', `${route.page}.wxml`))
+      const { meta, params } = resolveRouteBlock(path.resolve(config.root, config.entry, `${route.page}.wxml`))
       return {
         ...route,
         meta,
@@ -64,7 +64,7 @@ export default function(config: ResolvedConfig): Transform {
         routes = resolveRoute(config, routes)
 
         // 将routes写入app.json
-        const appJsonFilePath = path.resolve(config.root, 'src', 'app.json')
+        const appJsonFilePath = path.resolve(config.root, config.entry, 'app.json')
         let appJson = readJsonSync(appJsonFilePath)
         const resolvedAppJson = resolveAppJson(routes, config)
         appJson = { ...appJson, ...resolvedAppJson }

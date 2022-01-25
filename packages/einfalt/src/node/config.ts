@@ -5,13 +5,17 @@ import dotenv from 'dotenv'
 import dotenvExpand from 'dotenv-expand'
 import { build } from 'esbuild'
 import chalk from 'chalk'
-import { Alias, AliasOptions } from './plugins/alias'
 import { createDebugger, isObject, lookupFile, normalizePath } from './utils'
-import { createLogger, Logger, LogLevel } from './logger'
-import { BuildOptions, resolveBuildOptions, ResolvedBuildOptions } from './build'
-import { ComponentsOptions } from './plugins/components'
-import { ServerOptions } from './server'
-import { SpacingOptions } from './plugins/spacing'
+import { createLogger } from './logger'
+import { resolveBuildOptions } from './build'
+
+import type { Alias, AliasOptions } from './plugins/alias'
+import type { Logger, LogLevel } from './logger'
+import type { BuildOptions, ResolvedBuildOptions } from './build'
+import type { ComponentsOptions } from './plugins/components'
+import type { ServerOptions } from './server'
+import type { SpacingOptions } from './plugins/spacing'
+import type { AdditionalOption } from './plugins/inject'
 
 const debug = createDebugger('einfalt:config')
 
@@ -20,17 +24,15 @@ export interface ConfigEnv {
   mode: string
 }
 
-export interface Additional {
-  [file: string]: {
-    content: string
-    includes?: RegExp | RegExp[]
-    excludes?: RegExp | RegExp[]
-  }
-}
-
-export interface AdditionalOption {
-  prepend?: Additional
-  append?: Additional
+export interface Paths {
+  /**
+   * 首页路径
+   */
+  home?: string
+  /**
+   * router路径
+   */
+  router?: string
 }
 
 export interface UserConfig {
@@ -40,10 +42,12 @@ export interface UserConfig {
    * @default process.cwd()
    */
   root?: string
+
+  entry?: string
   /**
-   * 首页路径
+   * 路径相关配置
    */
-  home?: string
+  paths?: Paths
   /**
    * Directory to serve as plain static assets. Files in this directory are
    * served and copied to build dist dir as-is without transform. The value
@@ -59,10 +63,6 @@ export interface UserConfig {
    */
   mode?: string
   /**
-   * 指定router路径
-   */
-  router?: string
-  /**
    * Define global variable replacements.
    * Entries will be defined on `window` during dev and replaced during build.
    */
@@ -74,6 +74,7 @@ export interface UserConfig {
     alias?: AliasOptions
     components?: ComponentsOptions
     spacing?: SpacingOptions
+    additional?: AdditionalOption
   }
   /**
    * Server specific options, e.g. host, port, https...
@@ -98,8 +99,6 @@ export interface UserConfig {
    * @default root
    */
   envDir?: string
-
-  additional?: AdditionalOption
 }
 
 export type UserConfigFn = (env: ConfigEnv) => UserConfig | Promise<UserConfig>
@@ -123,6 +122,7 @@ export interface InlineConfig extends UserConfig {
 export type ResolvedConfig = Readonly<UserConfig & {
   configFile: string | undefined
   inlineConfig: InlineConfig
+  entry: string
   root: string
   publicDir: string
   command: 'build' | 'serve'
@@ -161,6 +161,8 @@ export async function resolveConfig(
     }
   }
 
+  const entry = config.entry || 'src'
+
   // Define logger
   const logger = createLogger(config.logLevel, {
     allowClearScreen: config.clearScreen
@@ -191,6 +193,7 @@ export async function resolveConfig(
     configFile: configFile ? normalizePath(configFile) : undefined,
     inlineConfig,
     root: resolvedRoot,
+    entry,
     publicDir: resolvedPublicDir,
     command,
     mode,

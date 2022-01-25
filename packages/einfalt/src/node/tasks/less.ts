@@ -41,9 +41,9 @@ function build(config: ResolvedConfig, source: string, target?: string) {
 export function lessTask(config: ResolvedConfig, source?: string) {
   let target = ''
   if (source) {
-    target = dirname(source.replace('src', config.build.outDir))
+    target = dirname(source.replace(config.entry, config.build.outDir))
   } else {
-    source = 'src/**/*.less'
+    source = `${config.entry}/**/*.less`
   }
 
   return () => build(config, source!, target)

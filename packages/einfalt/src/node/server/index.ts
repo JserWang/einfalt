@@ -138,8 +138,8 @@ export async function createServer(inlineConfig: InlineConfig) {
   })
 
   watcher.on('unlink', (file) => {
-    if (file.includes('src')) {
-      const filePath = normalizePath(file).replace('src', config.build.outDir)
+    if (file.includes(config.entry)) {
+      const filePath = normalizePath(file).replace(config.entry, config.build.outDir)
       if (existsSync(filePath)) {
         unlinkSync(filePath)
       }

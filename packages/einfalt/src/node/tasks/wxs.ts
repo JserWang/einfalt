@@ -22,9 +22,9 @@ function build(config: ResolvedConfig, source: string, target?: string) {
 export function wxsTask(config: ResolvedConfig, source?: string) {
   let target = ''
   if (source) {
-    target = dirname(source.replace('src', config.build.outDir))
+    target = dirname(source.replace(config.entry, config.build.outDir))
   } else {
-    source = 'src/**/*.wxs'
+    source = `${config.entry}/**/*.wxs`
   }
   return () => build(config, source!, target)
 }

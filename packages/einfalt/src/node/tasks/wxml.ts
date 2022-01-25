@@ -37,9 +37,9 @@ function processDist(config: ResolvedConfig, source: string, target?: string) {
 export function wxmlTask(config: ResolvedConfig, source?: string) {
   let target = ''
   if (source) {
-    target = dirname(source.replace('src', config.build.outDir))
+    target = dirname(source.replace(config.entry, config.build.outDir))
   } else {
-    source = 'src/**/*.wxml'
+    source = `${config.entry}/**/*.wxml`
   }
 
   return () => build(config, source!, target)

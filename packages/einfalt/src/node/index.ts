@@ -31,3 +31,7 @@ export type {
 export type {
   SpacingOptions
 } from './plugins/spacing'
+export type {
+  Additional,
+  AdditionalOption
+} from './plugins/inject'

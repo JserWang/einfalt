@@ -90,7 +90,7 @@ export async function doBuild(inlineConfig: InlineConfig = {}) {
 
   await execute([
     tsTask(config),
-    config.router ? routerTask(config) : emptyTask,
+    config.paths?.router ? routerTask(config) : emptyTask,
     wxmlTask(config),
     lessTask(config),
     jsonTask(config),
