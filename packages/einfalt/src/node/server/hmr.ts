@@ -103,7 +103,6 @@ export async function updateModules(file: string, config: ResolvedConfig) {
   if (file.includes(NPM_SOURCE)) {
     await execute([npmTask(config)])
   } else if (file.includes(config.entry)) {
-    console.log('in')
     const processor = getModuleProcessor(config, file)
     if (processor[extname]) {
       return await execute(processor[extname]())
