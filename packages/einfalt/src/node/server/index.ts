@@ -166,7 +166,7 @@ export async function createServer(inlineConfig: InlineConfig) {
   }
 
   // mock middleware
-  if (config.server.apiPrefix) {
+  if (config.server.apiPrefix && config.server.mockFileDir) {
     middlewares.use(serveMockMiddleware(config.server.apiPrefix, config.server.mockFileDir))
   }
 
