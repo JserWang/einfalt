@@ -14,6 +14,7 @@ import { resolveHttpServer } from './http'
 import { timeMiddleware } from './middlewares/time'
 import { servePublicMiddleware } from './middlewares/static'
 import { handleHMRUpdate, updateModules } from './hmr'
+import { serveMockMiddleware } from './middlewares/mock'
 
 export interface EinfaltDevServer {
   /**
@@ -56,6 +57,10 @@ export interface EinfaltDevServer {
 export interface ServerOptions {
   host?: string | boolean
   port?: number
+  apiPrefix?: string
+
+  mockFileDir?: string
+
   /**
    * If enabled, vite will exit if specified port is already in use
    */
@@ -158,6 +163,11 @@ export async function createServer(inlineConfig: InlineConfig) {
   // as-is without transforms.
   if (config.publicDir) {
     middlewares.use(servePublicMiddleware(config.publicDir))
+  }
+
+  // mock middleware
+  if (config.server.apiPrefix) {
+    middlewares.use(serveMockMiddleware(config.server.apiPrefix, config.server.mockFileDir))
   }
 
   const listen = httpServer.listen.bind(httpServer)
