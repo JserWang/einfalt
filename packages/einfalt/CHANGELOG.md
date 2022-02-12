@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/JserWang/einfalt/compare/v1.2.0...v1.3.0) (2022-02-12)
+
+
+### Features
+
+* support local mock ([f5e3054](https://github.com/JserWang/einfalt/commit/f5e3054614f6db395edf642a638706f6c34e6e99))
+
+
+
 # [1.2.0](https://github.com/JserWang/einfalt/compare/v1.1.1...v1.2.0) (2022-01-25)
 
 
