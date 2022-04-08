@@ -1,6 +1,6 @@
 {
   "name": "@einfalt/einfalt",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "license": "MIT",
   "author": "JserWang",
   "description": "",
@@ -63,7 +63,7 @@
     "fsevents": "~2.3.2"
   },
   "devDependencies": {
-    "@einfalt/router": "^1.0.1",
+    "@einfalt/router": "^1.0.3",
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "13.0.0",

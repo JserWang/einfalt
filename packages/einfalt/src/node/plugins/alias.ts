@@ -1,4 +1,5 @@
 import { Transform, TransformCallback } from 'stream'
+import { platform } from 'os'
 import path from 'path'
 import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
@@ -73,7 +74,10 @@ export default function(options?: AliasOptions): Transform {
         return callback(null, chunk)
       }
 
-      let relativePath = path.posix.relative(chunk.dirname, path.resolve(process.cwd(), matchedEntry.replacement))
+      const platformPath = platform() === 'win32' ? path.win32 : path.posix
+      let relativePath = platformPath.relative(chunk.dirname, platformPath.resolve(process.cwd(), matchedEntry.replacement))
+      // replace '\' to '/' for windows
+      relativePath = relativePath.replace(/\\/g, '/')
       relativePath = relativePath.endsWith('..') ? `${relativePath}/` : relativePath
       relativePath = relativePath === '' ? './' : relativePath
 
