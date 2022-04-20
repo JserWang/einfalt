@@ -1,3 +1,12 @@
+# [2.0.0-beta.0](https://github.com/JserWang/einfalt/compare/v1.3.1...v2.0.0-beta.0) (2022-04-20)
+
+
+### Features
+
+* **einfalt:** support alipay mini ([64a7a37](https://github.com/JserWang/einfalt/commit/64a7a3768e0023eba19c3e47e59d8c5cfdd713e9))
+
+
+
 ## [1.3.1](https://github.com/JserWang/einfalt/compare/v1.3.0...v1.3.1) (2022-04-08)
 
 
