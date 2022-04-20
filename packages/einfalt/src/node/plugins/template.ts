@@ -1,7 +1,7 @@
 import { Transform, TransformCallback } from 'stream'
 import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
-import { removeRouteBlock, hasRouteBlock } from '../wxml'
+import { removeRouteBlock, hasRouteBlock } from '../template'
 
 export default function(): Transform {
   return new Transform({
@@ -12,7 +12,7 @@ export default function(): Transform {
       }
 
       if (chunk.isStream()) {
-        this.emit('error', new PluginError('einfalt:wxml', 'Stream not support'))
+        this.emit('error', new PluginError('einfalt:template', 'Stream not support'))
         return callback(null, chunk)
       }
 

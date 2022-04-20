@@ -7,7 +7,7 @@ import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
 import { readJsonSync, writeJsonSync } from 'fs-extra'
 import { EmptyTransform, parsePath } from '../utils'
-import { parse } from '../wxml'
+import { parse } from '../template'
 import { ATTR_KEY } from '../constants'
 
 export interface ComponentResolver {

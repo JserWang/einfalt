@@ -177,9 +177,10 @@ export function writePrivateConfig(config: ResolvedConfig, routes: ResolvedRoute
 export function getFileSystemRoutes(config: ResolvedConfig): RouteRecord[] {
   let routes: RouteRecord[] = []
   const pathMap: { [packageName: string]: string[] } = {}
-  // TODO: 根据不同平台取不同平台的文件路径
+
+  const extname = config.platform === 'alipay' ? 'axml' : 'wxml'
   glob
-    .sync(['**/index.wxml', '!components', '!**/components/**', '!custom-tab-bar'], {
+    .sync([`**/index.${extname}`, '!components', '!**/components/**', '!custom-tab-bar'], {
       cwd: join(config.root, config.entry)
     })
     .forEach((file) => {

@@ -2,7 +2,7 @@ import { Transform, TransformCallback } from 'stream'
 import fs from 'fs'
 import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
-import { parse } from '../wxml'
+import { parse } from '../template'
 
 export interface SpacingOptions {
   path: string

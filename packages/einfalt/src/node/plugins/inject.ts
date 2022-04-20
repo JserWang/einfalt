@@ -40,7 +40,7 @@ export default function(config: ResolvedConfig): Transform {
       }
 
       if (chunk.isStream()) {
-        this.emit('error', new PluginError('einfalt:wxml', 'Stream not support'))
+        this.emit('error', new PluginError('einfalt:inject', 'Stream not support'))
         return callback(null, chunk)
       }
 

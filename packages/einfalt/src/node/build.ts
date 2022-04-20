@@ -5,13 +5,14 @@ import { InlineConfig, resolveConfig, ResolvedConfig } from './config'
 import { emptyTask, normalizePath, transformIgnore } from './utils'
 import { tsTask } from './tasks/typescript'
 import { jsonDistTask, jsonTask } from './tasks/json'
-import { wxmlDistTask, wxmlTask } from './tasks/wxml'
+import { templateDistTask, templateTask } from './tasks/template'
 import { lessTask } from './tasks/less'
 import { npmTask } from './tasks/npm'
-import { wxsTask } from './tasks/wxs'
 import { imageTask } from './tasks/image'
 import { execute } from './tasks'
 import { routerTask } from './tasks/router'
+import { copyTask } from './tasks/copy'
+import { jsTask } from './tasks/javascript'
 
 export interface BuildOptions {
   /**
@@ -90,16 +91,20 @@ export async function doBuild(inlineConfig: InlineConfig = {}) {
 
   await execute([
     tsTask(config),
+    jsTask(config),
     config.paths?.router ? routerTask(config) : emptyTask,
-    wxmlTask(config),
+    templateTask(config),
     lessTask(config),
     jsonTask(config),
-    wxmlDistTask(config),
+    templateDistTask(config),
     jsonDistTask(config),
-    wxsTask(config),
+    config.platform === 'wechat' ? copyTask({ config, extname: 'wxs' }) : emptyTask,
+    config.platform === 'alipay' ? copyTask({ config, extname: 'sjs' }) : emptyTask,
+    config.platform === 'wechat' ? copyTask({ config, extname: 'wxss' }) : emptyTask,
+    config.platform === 'alipay' ? copyTask({ config, extname: 'acss' }) : emptyTask,
     imageTask(config),
     // NOTE: 前面代码处理完后最终再执行copy npm
-    npmTask(config)
+    config.platform === 'wechat' ? npmTask(config) : emptyTask
   ])
 }
 

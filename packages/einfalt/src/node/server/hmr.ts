@@ -7,14 +7,15 @@ import { ResolvedConfig } from '../config'
 import { createDebugger, pathToGlob } from '../utils'
 import { execute } from '../tasks'
 import { lessTask } from '../tasks/less'
-import { wxmlDistTask, wxmlTask } from '../tasks/wxml'
+import { templateDistTask, templateTask } from '../tasks/template'
 import { jsonDistTask, jsonTask } from '../tasks/json'
-import { wxsTask } from '../tasks/wxs'
 import { NPM_SOURCE } from '../constants'
 import { npmTask } from '../tasks/npm'
 import { imageTask } from '../tasks/image'
 import { routerTask } from '../tasks/router'
-import { hasRouteBlock } from '../wxml'
+import { hasRouteBlock } from '../template'
+import { copyTask } from '../tasks/copy'
+import { jsTask } from '../tasks/javascript'
 import { createServer, EinfaltDevServer } from './index'
 
 export const debugHmr = createDebugger('einfalt:hmr')
@@ -59,42 +60,61 @@ function renameExtname(file: string, extname: string) {
   return file.replace(path.extname(file), extname)
 }
 
-function getModuleProcessor(config: ResolvedConfig, file: string): Record<string, () => TaskFunction[]> {
-  return {
-    '.ts': () => {
-      if (config.paths?.router && file.includes(config.paths.router)) {
-        return [routerTask(config)]
-      }
+function getModuleProcessor(config: ResolvedConfig, file: string, extname: string): () => TaskFunction[] {
+  switch (extname) {
+    case '.ts':
+      return () => {
+        if (config.paths?.router && file.includes(config.paths.router)) {
+          return [routerTask(config)]
+        }
 
-      return [tsTask(config, pathToGlob(file))]
-    },
-    '.less': () => [lessTask(config, pathToGlob(file)), lessTask(config, 'src/app.less')],
-    '.wxml': () => {
-      const tasks: TaskFunction[] = []
-      const code = String(readFileSync(file))
-      if (config.paths?.router && hasRouteBlock(code)) {
-        tasks.push(routerTask(config))
+        return [tsTask(config, pathToGlob(file))]
       }
-      tasks.push(
-        wxmlTask(config, pathToGlob(file)),
-        wxmlDistTask(config, source2Dist(file, config)),
-        jsonDistTask(
-          config,
-          pathToGlob(
-            renameExtname(source2Dist(file, config), '.json')
+      break
+    case '.js':
+      return () => {
+        if (config.paths?.router && file.includes(config.paths.router)) {
+          return [routerTask(config)]
+        }
+
+        return [jsTask(config, pathToGlob(file))]
+      }
+      break
+    case '.less':
+      return () => [lessTask(config, pathToGlob(file)), lessTask(config, 'src/app.less')]
+      break
+    case '.axml':
+    case '.wxml':
+      return () => {
+        const tasks: TaskFunction[] = []
+        const code = String(readFileSync(file))
+        if (config.paths?.router && hasRouteBlock(code)) {
+          tasks.push(routerTask(config))
+        }
+        tasks.push(
+          templateTask(config, pathToGlob(file)),
+          templateDistTask(config, source2Dist(file, config)),
+          jsonDistTask(
+            config,
+            pathToGlob(
+              renameExtname(source2Dist(file, config), '.json')
+            )
           )
         )
-      )
 
-      return tasks
-    },
-    '.wxs': () => [wxsTask(config, pathToGlob(file))],
-    '.json': () => {
-      return [
-        jsonTask(config, pathToGlob(file)),
-        jsonDistTask(config, source2Dist(file, config))
+        return tasks
+      }
+    case '.json':
+      return () => {
+        return [
+          jsonTask(config, pathToGlob(file)),
+          jsonDistTask(config, source2Dist(file, config))
+        ]
+      }
+    default:
+      return () => [
+        copyTask({ config, source: pathToGlob(file), extname: extname.substr(1) })
       ]
-    }
   }
 }
 
@@ -103,9 +123,9 @@ export async function updateModules(file: string, config: ResolvedConfig) {
   if (file.includes(NPM_SOURCE)) {
     await execute([npmTask(config)])
   } else if (file.includes(config.entry)) {
-    const processor = getModuleProcessor(config, file)
-    if (processor[extname]) {
-      return await execute(processor[extname]())
+    const processor = getModuleProcessor(config, file, extname)
+    if (processor) {
+      return await execute(processor())
     }
     await execute([imageTask(config)])
   }

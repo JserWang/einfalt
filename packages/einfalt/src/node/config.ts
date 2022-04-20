@@ -44,6 +44,12 @@ export interface UserConfig {
   root?: string
 
   entry?: string
+
+  /**
+   * 指定平台
+   */
+  platform?: 'alipay' | 'wechat'
+
   /**
    * 路径相关配置
    */

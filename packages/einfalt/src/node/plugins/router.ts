@@ -7,7 +7,7 @@ import { RouteRecord } from '@einfalt/router'
 import { ROUTE_MODULE } from '../constants'
 import { getFileSystemRoutes, resolveAppJson, writePrivateConfig } from '../router'
 import { ResolvedConfig } from '../config'
-import { resolveRouteBlock } from '../wxml'
+import { resolveRouteBlock } from '../template'
 
 const routeRE = /import routes from 'virtual:generated-pages'/
 
@@ -18,9 +18,11 @@ export interface ResolvedRouteRecord extends RouteRecord {
 
 function resolveRoute(config: ResolvedConfig, routes: RouteRecord[]): ResolvedRouteRecord[] {
   return routes.map((route) => {
+    const extname = config.platform === 'alipay' ? 'axml' : 'wxml'
+
     if (route.root && route.children) {
       route.children = route.children.map((child) => {
-        const { meta, params } = resolveRouteBlock(path.resolve(config.root, config.entry, `${route.root}/${child.page}.wxml`))
+        const { meta, params } = resolveRouteBlock(path.resolve(config.root, config.entry, `${route.root}/${child.page}.${extname}`))
         return {
           ...child,
           meta,
@@ -29,7 +31,7 @@ function resolveRoute(config: ResolvedConfig, routes: RouteRecord[]): ResolvedRo
       })
     }
     if (route.page) {
-      const { meta, params } = resolveRouteBlock(path.resolve(config.root, config.entry, `${route.page}.wxml`))
+      const { meta, params } = resolveRouteBlock(path.resolve(config.root, config.entry, `${route.page}.${extname}`))
       return {
         ...route,
         meta,
@@ -60,7 +62,7 @@ export default function(config: ResolvedConfig): Transform {
 
       let routes = getFileSystemRoutes(config)
       if (routes.length > 0) {
-        // 从wxml中解析meta
+        // 从template中解析meta
         routes = resolveRoute(config, routes)
 
         // 将routes写入app.json
@@ -70,8 +72,10 @@ export default function(config: ResolvedConfig): Transform {
         appJson = { ...appJson, ...resolvedAppJson }
         writeJsonSync(appJsonFilePath, appJson, { spaces: 2 })
 
-        // 写入private.config.json
-        writePrivateConfig(config, routes)
+        if (config.platform === 'wechat') {
+          // 写入private.config.json
+          writePrivateConfig(config, routes)
+        }
 
         // 替换为实际routes
         code = code.replace(routeRE, `const routes = ${JSON.stringify(routes)}`)
