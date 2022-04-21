@@ -10,7 +10,8 @@
   },
   "scripts": {
     "lint": "eslint --ext .js,.ts packages/*/src/**",
-    "build-einfalt": "cd packages/einfalt && yarn build"
+    "build-einfalt": "cd packages/einfalt && yarn build",
+    "release:einfalt": "cd packages/einfalt && yarn release"
   },
   "devDependencies": {
     "@jserwang/eslint-config": "^0.1.6",
