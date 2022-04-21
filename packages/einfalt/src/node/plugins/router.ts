@@ -5,7 +5,7 @@ import PluginError from 'plugin-error'
 import { readJsonSync, writeJsonSync } from 'fs-extra'
 import { RouteRecord } from '@einfalt/router'
 import { ROUTE_MODULE } from '../constants'
-import { getFileSystemRoutes, resolveAppJson, writePrivateConfig } from '../router'
+import { getFileSystemRoutes, resolveAppJson, writeCompileMode, writePrivateConfig } from '../router'
 import { ResolvedConfig } from '../config'
 import { resolveRouteBlock } from '../template'
 
@@ -75,6 +75,8 @@ export default function(config: ResolvedConfig): Transform {
         if (config.platform === 'wechat') {
           // 写入private.config.json
           writePrivateConfig(config, routes)
+        } else if (config.platform === 'alipay') {
+          writeCompileMode(config, routes)
         }
 
         // 替换为实际routes

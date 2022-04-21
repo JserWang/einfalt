@@ -42,7 +42,13 @@ export function resolveRouteBlock(path: string) {
     const tag = tags[i]
     const text = parsedCode[tag]['#text']
     if (tag === 'route' && text) {
-      return yaml.parse(text) || {}
+      try {
+        return yaml.parse(text) || {}
+      } catch (e) {
+        createLogger().error(
+          chalk.red(`error when parse yaml:\n${path}`)
+        )
+      }
     }
   }
   return {}

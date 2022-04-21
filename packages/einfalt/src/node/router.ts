@@ -31,6 +31,13 @@ export interface ProjectPrivateConfigJson {
   }
 }
 
+export interface CompileModeJson {
+  modes: {
+    title?: string
+    page?: string
+  }[]
+}
+
 const SUBPACKAGE_PREFIX = 'package'
 const MAIN_PKG = 'mainPackage'
 const PAGE_BASE_PATH_NAME = 'pages'
@@ -127,8 +134,15 @@ function initProjectPrivateConfig(): ProjectPrivateConfigJson {
   }
 }
 
+function initCompileModeJson(): CompileModeJson {
+  return {
+    modes: []
+  }
+}
+
 /**
  * 根据传入pages生成或修改project.private.config.json
+ * 微信小程序
  * @param config
  * @param routes
  */
@@ -172,6 +186,32 @@ export function writePrivateConfig(config: ResolvedConfig, routes: ResolvedRoute
   json.condition.miniprogram.list = result
 
   writeJsonSync(privateJsonPath, json, { spaces: 2 })
+}
+
+/**
+ * 根据传入pages生成或修改compileMode
+ * 支付宝小程序
+ * @param config
+ * @param routes
+ */
+export function writeCompileMode(config: ResolvedConfig, routes: ResolvedRouteRecord[]) {
+  const compileModeJsonPath = resolve(config.root, '.mini-ide', 'compileMode.json')
+  let json: CompileModeJson = initCompileModeJson()
+
+  if (!existsSync(compileModeJsonPath)) {
+    createFileSync(compileModeJsonPath)
+  } else {
+    json = readJsonSync(compileModeJsonPath)
+  }
+
+  json.modes = routes.map((route) => {
+    return {
+      title: route.meta?.title as string ?? route.name,
+      page: route.page
+    }
+  })
+
+  writeJsonSync(compileModeJsonPath, json, { spaces: 2 })
 }
 
 export function getFileSystemRoutes(config: ResolvedConfig): RouteRecord[] {
