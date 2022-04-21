@@ -25,6 +25,15 @@
 
 
 
+# [2.0.0-beta.1](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2022-04-21)
+
+
+### Features
+
+* **einfalt:** write compileMode.json for alipay ([e558372](https://github.com/JserWang/einfalt/commit/e558372be1c90a4f603b4dd821a6bb89361d93d2))
+
+
+
 # [2.0.0-beta.0](https://github.com/JserWang/einfalt/compare/v1.3.1...v2.0.0-beta.0) (2022-04-20)
 
 
