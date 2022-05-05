@@ -1,3 +1,12 @@
+# [2.0.0-beta.2](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-05-05)
+
+
+### Features
+
+* **einfalt:** default env for app version ([76619c1](https://github.com/JserWang/einfalt/commit/76619c1ea100a6b00765ee5746ca886dca664392))
+
+
+
 # [2.0.0-beta.1](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2022-04-21)
 
 
