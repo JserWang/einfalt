@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import dotenvExpand from 'dotenv-expand'
 import { build } from 'esbuild'
 import chalk from 'chalk'
+import { readJSONSync } from 'fs-extra'
 import { createDebugger, isObject, lookupFile, normalizePath } from './utils'
 import { createLogger } from './logger'
 import { resolveBuildOptions } from './build'
@@ -540,6 +541,10 @@ export function loadEnv(
       env[key] = process.env[key] as string
     }
   }
+
+  const json = readJSONSync(path.resolve(process.cwd(), 'package.json'))
+
+  env.EF_APP_VERSION = json.version
 
   for (const file of envFiles) {
     const path = lookupFile(envDir, [file], true)
