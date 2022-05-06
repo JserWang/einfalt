@@ -1,6 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 import { decode, encodeQueryKey, encodeQueryValue, PLUS_RE } from './encoding'
 
+function isObject(value: unknown): value is Record<string, any> {
+  return Object.prototype.toString.call(value) === '[object Object]'
+}
 /**
  * Possible values in normalized {@link LocationQuery}
  *
@@ -80,6 +83,26 @@ export function parseQuery(search: string): LocationQuery {
 }
 
 /**
+ *
+ * @param query
+ */
+export function parseQueryObj(query: Record<string, string | undefined>) {
+  const result: Record<any, unknown> = {}
+  for (const key in query) {
+    if (!query[key]) {
+      continue
+    }
+
+    try {
+      result[key] = JSON.parse(decode(query[key]!))
+    } catch {
+      result[key] = decode(query[key]!)
+    }
+  }
+  return result
+}
+
+/**
  * Stringifies a {@link LocationQueryRaw} object. Like `URLSearchParams`, it
  * doesn't prepend a `?`
  *
@@ -99,7 +122,12 @@ export function stringifyQuery(query: LocationQueryRaw): string {
       if (value !== undefined) { search += key }
       continue
     }
-    // keep null values
+
+    if (isObject(value)) {
+      search += `${key}=${encodeQueryValue(JSON.stringify(value))}`
+      continue
+    }
+
     const values: LocationQueryValueRaw[] = Array.isArray(value)
       ? value.map(v => v && encodeQueryValue(v))
       : [value && encodeQueryValue(value)]

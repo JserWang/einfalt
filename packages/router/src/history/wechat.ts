@@ -1,3 +1,4 @@
+import { parseQueryObj } from '../query'
 import { HistoryLocation, HistoryState, RouterHistory } from './common'
 
 const MAX_STACK_LENGTH = 10
@@ -40,29 +41,8 @@ export function createWechatHistory(): RouterHistory {
     const currentPage = pages[pages.length - 1]
     return {
       route: currentPage.route,
-      params: currentPage.options
+      params: parseQueryObj(currentPage.options)
     }
-  }
-
-  function setParams(key: string, params: any) {
-    wx.setStorageSync(key, params)
-  }
-
-  function getParams(key: string) {
-    return wx.getStorageSync(key)
-  }
-
-  function removeParams(key: string) {
-    wx.removeStorageSync(key)
-  }
-
-  function removeParamsByPrefix(prefix: string) {
-    const { keys } = wx.getStorageInfoSync()
-    keys.forEach((key) => {
-      if (key.startsWith(prefix)) {
-        removeParams(key)
-      }
-    })
   }
 
   return {
@@ -73,10 +53,6 @@ export function createWechatHistory(): RouterHistory {
     switchTab,
     reLaunch,
     getCurrentRoute,
-    getRoutes,
-    setParams,
-    getParams,
-    removeParams,
-    removeParamsByPrefix
+    getRoutes
   }
 }

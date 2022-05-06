@@ -1,11 +1,12 @@
 import { promisify } from '../utils'
+import { INJECT_QUERY_KEY } from '../constants'
 import { HistoryLocation, RouterHistory } from './common'
 
 const MAX_STACK_LENGTH = 10
 
 export function createAlipayHistory(): RouterHistory {
-  function push(to: HistoryLocation) {
-    return promisify(my.navigateTo)({ url: to })
+  function push(to: HistoryLocation, params: { events: any }) {
+    return promisify(my.navigateTo)({ url: to, ...params })
   }
 
   function switchTab(to: string) {
@@ -32,36 +33,12 @@ export function createAlipayHistory(): RouterHistory {
     const currentPage = pages[pages.length - 1]
     return {
       route: currentPage.route,
-      params: currentPage.query
+      params: currentPage.data[INJECT_QUERY_KEY] || {}
     }
   }
 
   function getRoutes() {
     return getCurrentPages()
-  }
-
-  function setParams(key: string, params: any) {
-    my.setStorageSync({
-      key,
-      data: params
-    })
-  }
-
-  function getParams(key: string) {
-    return my.getStorageSync({ key }).data
-  }
-
-  function removeParams(key: string) {
-    my.removeStorageSync({ key })
-  }
-
-  function removeParamsByPrefix(prefix: string) {
-    const { keys } = my.getStorageInfoSync()
-    keys.forEach((key) => {
-      if (key.startsWith(prefix)) {
-        removeParams(key)
-      }
-    })
   }
 
   return {
@@ -72,10 +49,6 @@ export function createAlipayHistory(): RouterHistory {
     switchTab,
     reLaunch,
     getCurrentRoute,
-    getRoutes,
-    setParams,
-    getParams,
-    removeParams,
-    removeParamsByPrefix
+    getRoutes
   }
 }

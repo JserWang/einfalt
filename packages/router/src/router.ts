@@ -3,7 +3,7 @@ import { RouterHistory } from './history/common'
 import { parseURL } from './location'
 import { RouterMatcher } from './matcher'
 import { guardToPromiseFn } from './navigationGuard'
-import { patchMiniprogram } from './patchMiniprogram'
+import { patchPage } from './patch'
 import { stringifyQuery } from './query'
 import {
   Lazy,
@@ -21,8 +21,6 @@ export interface RouterOptions {
   history: RouterHistory
   routes: RouteRecord[]
 }
-
-const STORAGE_KEY_PREFIX = 'MP_ROUTE_PARAMS_'
 
 export interface Router {
   /**
@@ -92,8 +90,6 @@ export interface Router {
   afterEach(guard: NavigationHookAfter): () => void
 
   getCurrentRoute(): RouteLocationNormalized
-
-  clearParams(index?: number): void
 }
 
 export function createRouter(this: any, options: RouterOptions): Router {
@@ -129,21 +125,6 @@ export function createRouter(this: any, options: RouterOptions): Router {
     }
   }
 
-  function findPageInStack(page: string) {
-    const currentRoutes = routerHistory.getRoutes()
-    const routes = currentRoutes.map(page => page.route) as string[]
-    const targetIndex = routes.indexOf(page)
-    // eslint-disable-next-line unicorn/prefer-includes
-    if (targetIndex > -1) {
-      return {
-        page: currentRoutes[targetIndex],
-        index: targetIndex,
-        delta: currentRoutes.length - targetIndex - 1
-      }
-    }
-    return null
-  }
-
   function locationAsObject(
     to: RouteLocation | RouteLocationNormalized
   ): Exclude<RouteLocation, string> | RouteLocationNormalized {
@@ -163,24 +144,8 @@ export function createRouter(this: any, options: RouterOptions): Router {
   function changeLocation(to: RouteLocation, from?: RouteLocation): Promise<unknown> {
     const targetLocation = matcher.resolve(to)
 
-    const currentStackLength = routerHistory.getRoutes().length
     const currentRoute = getCurrentRoute()
-    const currentIndex = currentStackLength - 1
     const toRoute = normalizeRoute(targetLocation)
-    // switchTab 跳转时，不会触发path onUnload
-    if (currentRoute.meta?.isTab) {
-      routerHistory.removeParams(`${STORAGE_KEY_PREFIX}${currentIndex}`)
-    }
-
-    // 当跳转目标页与当前页相同时，不去路由栈中查找
-    if (toRoute.page !== currentRoute.page) {
-      const found = findPageInStack(toRoute.page)
-      // When target page in the page stack，run back
-      if (found && found.index > -1) {
-        routerHistory.setParams(`${STORAGE_KEY_PREFIX}${found.index}`, toRoute.params || {})
-        return routerHistory.go(found.delta)
-      }
-    }
 
     // Use replace when current page stack length >= max
     if (routerHistory.getRoutes().length >= routerHistory.MAX_STACK_LENGTH) {
@@ -209,32 +174,20 @@ export function createRouter(this: any, options: RouterOptions): Router {
         }
 
         let method
-        // 根据类型调用history的跳转方法
-        let toIndex = currentStackLength
         let params = {}
         if (typeof to !== 'string' && to.reLaunch) {
           method = routerHistory.reLaunch
-          toIndex = 0
         } else if (toRoute.meta?.isTab) {
           method = routerHistory.switchTab
-          toIndex = currentIndex
         } else if (typeof to !== 'string' && to.replace) {
           method = routerHistory.replace
-          toIndex = currentIndex
         } else {
           params = { events: (to as any).events }
           method = routerHistory.push
         }
 
-        // 参数存储应在页面跳转方式确认后再进行赋值
-        if (targetLocation.params && Object.keys(targetLocation.params).length > 0) {
-          routerHistory.setParams(`${STORAGE_KEY_PREFIX}${toIndex}`, targetLocation.params || {})
-        } else {
-          routerHistory.removeParams(`${STORAGE_KEY_PREFIX}${toIndex}`)
-        }
-
         // 跳转
-        const result = await method(`/${toRoute.page}`, params)
+        const result = await method(`/${toRoute.fullPagePath}`, params)
         triggerAfterEach(toRoute, currentRoute)
 
         return result
@@ -249,7 +202,7 @@ export function createRouter(this: any, options: RouterOptions): Router {
     if (recordMatcher) {
       return normalizeRoute({
         record: recordMatcher.record,
-        params: routerHistory.getParams(`${STORAGE_KEY_PREFIX}${routerHistory.getRoutes().length - 1}`) || {}
+        params: page.params
       })
     }
 
@@ -264,15 +217,7 @@ export function createRouter(this: any, options: RouterOptions): Router {
     }
   }
 
-  function clearParams(index?: number) {
-    if (index) {
-      routerHistory.removeParams(`${STORAGE_KEY_PREFIX}${index}`)
-    } else {
-      routerHistory.removeParamsByPrefix(`${STORAGE_KEY_PREFIX}`)
-    }
-  }
-
-  patchMiniprogram()
+  patchPage()
 
   return {
     options,
@@ -284,8 +229,7 @@ export function createRouter(this: any, options: RouterOptions): Router {
     go,
     beforeEach: beforeGuards.add,
     afterEach: afterGuards.add,
-    getCurrentRoute,
-    clearParams
+    getCurrentRoute
   }
 }
 

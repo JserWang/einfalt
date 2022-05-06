@@ -34,8 +34,4 @@ export interface RouterHistory {
   reLaunch(to: HistoryLocation): Promise<unknown>
   getCurrentRoute(): CurrentRoute
   getRoutes(): any[]
-  setParams(page: string, params: any): void
-  getParams(page: string): any
-  removeParams(key: string): void
-  removeParamsByPrefix(prefix: string): void
 }
