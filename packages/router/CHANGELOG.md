@@ -1,3 +1,9 @@
+# [2.0.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.2...v2.0.0) (2022-05-06)
+
+### Features
+
+- **router:** use query string for params ([6f313d0](https://github.com/JserWang/einfalt/commit/6f313d0da72ebfff321f3f6df6df0c6b6035237a))
+
 ## [1.0.3](https://github.com/JserWang/einfalt/compare/v1.1.1...v1.0.3) (2021-12-07)
 
 ### Bug Fixes
