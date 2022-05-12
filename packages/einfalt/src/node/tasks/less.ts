@@ -16,7 +16,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
   target = target || config.build.outDir
   let hasError = false
 
-  const renameExtname = config.platform === 'alipay' ? '.acss' : 'wxss'
+  const renameExtname = config.platform === 'alipay' ? '.acss' : '.wxss'
 
   return gulp
     // 指定编译目录
