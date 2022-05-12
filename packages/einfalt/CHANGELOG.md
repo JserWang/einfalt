@@ -1,3 +1,12 @@
+# [2.0.0-beta.3](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-05-12)
+
+
+### Bug Fixes
+
+* **einfalt:** less extname ([47dac12](https://github.com/JserWang/einfalt/commit/47dac1233884b7500b4989fa33650180598f7641))
+
+
+
 # [2.0.0-beta.2](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-05-05)
 
 
