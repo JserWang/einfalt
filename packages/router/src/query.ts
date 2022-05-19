@@ -94,7 +94,14 @@ export function parseQueryObj(query: Record<string, string | undefined>) {
     }
 
     try {
-      result[key] = JSON.parse(decode(query[key]!))
+      const parsed = JSON.parse(decode(query[key]!))
+      // 当JSON.parse为对象后，才认为是一个json，否则一律使用原始值
+      // 至于原因，可以尝试一下： JSON.parse("230832196807199999") 在浏览器的输出
+      if (typeof parsed === 'object' && parsed) {
+        result[key] = parsed
+      } else {
+        result[key] = decode(query[key]!)
+      }
     } catch {
       result[key] = decode(query[key]!)
     }
