@@ -1,3 +1,13 @@
+# [2.1.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.1.0) (2022-05-23)
+
+### Bug Fixes
+
+- **router:** parse query error eg. JSON.parse("230832196807199999") ([ee44990](https://github.com/JserWang/einfalt/commit/ee449907f84edc13f6ab4e2852198959931fd80d))
+
+### Features
+
+- **router:** find page in stack ([2e1dbe8](https://github.com/JserWang/einfalt/commit/2e1dbe80251f0e4ec4c9459ced0725f3e6ef24d1))
+
 ## [2.0.2](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.0.2) (2022-05-19)
 
 ### Bug Fixes
