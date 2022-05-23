@@ -106,6 +106,24 @@ export function createRouter(this: any, options: RouterOptions): Router {
     return !!matcher.getRouteRecordMatcherByName(name)
   }
 
+  function findPageInStack(fullPagePath: string) {
+    const routes = routerHistory.getRoutes()
+    const targetIndex = routes.findIndex((item) => {
+      const normalizePage = normalizeRouteByPage(item.route, item.params)
+      return normalizePage.fullPagePath === fullPagePath
+    })
+
+    // eslint-disable-next-line unicorn/prefer-includes
+    if (targetIndex > -1) {
+      return {
+        page: routes[targetIndex],
+        index: targetIndex,
+        delta: routes.length - targetIndex - 1
+      }
+    }
+    return null
+  }
+
   function triggerAfterEach(to: RouteLocationNormalized, from: RouteLocationNormalized): void {
     for (const guard of afterGuards.list()) {
       guard(to, from)
@@ -148,8 +166,17 @@ export function createRouter(this: any, options: RouterOptions): Router {
     const toRoute = normalizeRoute(targetLocation)
 
     // Use replace when current page stack length >= max
-    if (routerHistory.getRoutes().length >= routerHistory.MAX_STACK_LENGTH) {
+    if (routerHistory.getPagesLength() >= routerHistory.MAX_STACK_LENGTH) {
       to.replace = true
+    }
+
+    // 当跳转目标页与当前页相同时，不去路由栈中查找
+    if (toRoute.fullPagePath !== currentRoute.fullPagePath) {
+      const found = findPageInStack(toRoute.fullPagePath)
+      // 当目标页面在路由栈中，执行back
+      if (found && found.index > -1) {
+        return routerHistory.go(found.delta)
+      }
     }
 
     const guards: Lazy<any>[] = []
@@ -198,11 +225,15 @@ export function createRouter(this: any, options: RouterOptions): Router {
 
   function getCurrentRoute(): RouteLocationNormalized {
     const page = routerHistory.getCurrentRoute()
-    const recordMatcher = matcher.getRouteRecordMatcherByPage(page.route)
+    return normalizeRouteByPage(page.route, page.params)
+  }
+
+  function normalizeRouteByPage(route: string, params: Record<string, any>) {
+    const recordMatcher = matcher.getRouteRecordMatcherByPage(route)
     if (recordMatcher) {
       return normalizeRoute({
         record: recordMatcher.record,
-        params: page.params
+        params
       })
     }
 

@@ -29,16 +29,24 @@ export function createAlipayHistory(): RouterHistory {
   }
 
   function getCurrentRoute() {
-    const pages = getCurrentPages()
+    const pages = getCurrentPages() as unknown as tinyapp.IPageInstance<any>[]
     const currentPage = pages[pages.length - 1]
-    return {
-      route: currentPage.route,
-      params: currentPage.data[INJECT_QUERY_KEY] || {}
-    }
+    return _normalizePage(currentPage)
   }
 
   function getRoutes() {
-    return getCurrentPages()
+    return (getCurrentPages() as unknown as tinyapp.IPageInstance<any>[]).map(page => _normalizePage(page))
+  }
+
+  function getPagesLength() {
+    return getCurrentPages().length
+  }
+
+  function _normalizePage(page: tinyapp.IPageInstance<any>) {
+    return {
+      route: page.route,
+      params: page.data[INJECT_QUERY_KEY] || {}
+    }
   }
 
   return {
@@ -49,6 +57,7 @@ export function createAlipayHistory(): RouterHistory {
     switchTab,
     reLaunch,
     getCurrentRoute,
-    getRoutes
+    getRoutes,
+    getPagesLength
   }
 }

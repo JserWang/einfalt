@@ -33,15 +33,23 @@ export function createWechatHistory(): RouterHistory {
   }
 
   function getRoutes() {
-    return getCurrentPages()
+    return getCurrentPages().map(page => _normalizePage(page))
   }
 
   function getCurrentRoute() {
     const pages = getCurrentPages()
     const currentPage = pages[pages.length - 1]
+    return _normalizePage(currentPage)
+  }
+
+  function getPagesLength() {
+    return getCurrentPages().length
+  }
+
+  function _normalizePage(page: WechatMiniprogram.Page.Instance<any, any>) {
     return {
-      route: currentPage.route,
-      params: parseQueryObj(currentPage.options)
+      route: page.route,
+      params: parseQueryObj(page.options)
     }
   }
 
@@ -53,6 +61,7 @@ export function createWechatHistory(): RouterHistory {
     switchTab,
     reLaunch,
     getCurrentRoute,
-    getRoutes
+    getRoutes,
+    getPagesLength
   }
 }

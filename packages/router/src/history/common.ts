@@ -33,5 +33,6 @@ export interface RouterHistory {
   switchTab(to: HistoryLocation): Promise<unknown>
   reLaunch(to: HistoryLocation): Promise<unknown>
   getCurrentRoute(): CurrentRoute
-  getRoutes(): any[]
+  getRoutes(): {route: string; params: Record<string, any>}[]
+  getPagesLength(): number
 }
