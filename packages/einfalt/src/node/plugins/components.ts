@@ -144,7 +144,11 @@ export default function(options?: ComponentsOptions): Transform {
         const jsonFile = join(chunk.base, dirname, `${basename}.json`)
         if (existsSync(jsonFile)) {
           const json = readJsonSync(jsonFile)
-          json[options.targetKey] = result
+          const originComponents = json[options.targetKey]
+          json[options.targetKey] = {
+            ...originComponents,
+            ...result
+          }
           writeJsonSync(jsonFile, json, { spaces: 2 })
         }
       }
