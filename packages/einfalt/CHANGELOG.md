@@ -1,3 +1,12 @@
+# [2.0.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.0.0) (2022-06-01)
+
+
+### Bug Fixes
+
+* **einfalt:** 保留原写入components ([d9cf078](https://github.com/JserWang/einfalt/commit/d9cf078f3622b28f2cecf3a22067f12fe997f347))
+
+
+
 # [2.0.0-beta.3](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-05-12)
 
 
