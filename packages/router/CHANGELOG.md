@@ -1,3 +1,9 @@
+## [2.1.1](https://github.com/JserWang/einfalt/compare/v2.0.0...v2.1.1) (2022-06-01)
+
+### Bug Fixes
+
+- **router:** set default value to data ([2f82a3b](https://github.com/JserWang/einfalt/commit/2f82a3b4d432247bbd790c5757b60d69510951a8))
+
 # [2.1.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.1.0) (2022-05-23)
 
 ### Bug Fixes
