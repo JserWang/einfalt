@@ -6,6 +6,8 @@ export function patchPage() {
 
   Page = function(options) {
     const { onLoad } = options
+    // @ts-ignore
+    options.data = options.data || {}
 
     options.onLoad = function(query) {
       // @ts-ignore
