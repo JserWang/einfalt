@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/JserWang/einfalt/compare/v2.0.0...v2.0.1) (2022-06-10)
+
+
+### Bug Fixes
+
+* **einfalt:** init json when condition is empty ([99e52e9](https://github.com/JserWang/einfalt/commit/99e52e9339d4ea586a024e7c7eaae6a9f6993680))
+
+
+
 # [2.0.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.0.0) (2022-06-01)
 
 
