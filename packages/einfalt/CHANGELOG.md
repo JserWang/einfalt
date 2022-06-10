@@ -1,3 +1,12 @@
+## [2.0.2](https://github.com/JserWang/einfalt/compare/v2.0.1...v2.0.2) (2022-06-10)
+
+
+### Bug Fixes
+
+* **einfalt:** alias relativePath replace error ([adbe362](https://github.com/JserWang/einfalt/commit/adbe3627f64af01dda3919a1849aa6271698bede))
+
+
+
 ## [2.0.1](https://github.com/JserWang/einfalt/compare/v2.0.0...v2.0.1) (2022-06-10)
 
 
