@@ -154,6 +154,11 @@ export function writePrivateConfig(config: ResolvedConfig, routes: ResolvedRoute
     createFileSync(privateJsonPath)
   } else {
     json = readJsonSync(privateJsonPath)
+    if (!json.condition) {
+      json = {
+        ...initProjectPrivateConfig()
+      }
+    }
   }
 
   const originList: ListItem[] = json.condition.miniprogram.list
