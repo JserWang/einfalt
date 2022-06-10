@@ -1,3 +1,12 @@
+## [2.0.3](https://github.com/JserWang/einfalt/compare/v2.0.2...v2.0.3) (2022-06-10)
+
+
+### Bug Fixes
+
+* **einfalt:** inject chunk path for windows ([7c4d7a5](https://github.com/JserWang/einfalt/commit/7c4d7a50e3d635a0e462667a9bbc4f89a3ddf9bb))
+
+
+
 ## [2.0.2](https://github.com/JserWang/einfalt/compare/v2.0.1...v2.0.2) (2022-06-10)
 
 
