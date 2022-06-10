@@ -79,6 +79,11 @@ export default function(options?: AliasOptions): Transform {
       // replace '\' to '/' for windows
       relativePath = relativePath.replace(/\\/g, '/')
       relativePath = relativePath.endsWith('..') ? `${relativePath}/` : relativePath
+
+      if (matchedEntry.replacement.endsWith('/')) {
+        relativePath = relativePath.endsWith('/') ? relativePath : `${relativePath}/`
+      }
+
       relativePath = relativePath === '' ? './' : relativePath
 
       code = code.replace(new RegExp(matchedEntry.find, 'g'), relativePath)
