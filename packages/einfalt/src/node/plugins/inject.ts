@@ -61,15 +61,17 @@ export default function(config: ResolvedConfig): Transform {
       const prependOption = additional.prepend?.[extname]
       const appendOption = additional.append?.[extname]
 
+      // fix for windows
+      const chunkName = chunk.dirname.replace(/\\/g, '/')
       if (prependOption
-        && (!prependOption.includes || isMatched(chunk.dirname, prependOption.includes))
-        && (!prependOption.excludes || !isMatched(chunk.dirname, prependOption.excludes))) {
+        && (!prependOption.includes || isMatched(chunkName, prependOption.includes))
+        && (!prependOption.excludes || !isMatched(chunkName, prependOption.excludes))) {
         prependData = resolvePrependAdditional(config, extname)
       }
 
       if (appendOption
-        && (!appendOption.includes || isMatched(chunk.dirname, appendOption.includes))
-        && (!appendOption.excludes || !isMatched(chunk.dirname, appendOption.excludes))) {
+        && (!appendOption.includes || isMatched(chunkName, appendOption.includes))
+        && (!appendOption.excludes || !isMatched(chunkName, appendOption.excludes))) {
         appendData = resolveAppendAdditional(config, extname)
       }
 
