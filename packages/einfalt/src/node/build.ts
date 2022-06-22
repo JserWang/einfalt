@@ -92,10 +92,10 @@ export async function doBuild(inlineConfig: InlineConfig = {}) {
   await execute([
     tsTask(config),
     jsTask(config),
+    jsonTask(config),
     config.paths?.router ? routerTask(config) : emptyTask,
     templateTask(config),
     lessTask(config),
-    jsonTask(config),
     templateDistTask(config),
     jsonDistTask(config),
     config.platform === 'wechat' ? copyTask({ config, extname: 'wxs' }) : emptyTask,
