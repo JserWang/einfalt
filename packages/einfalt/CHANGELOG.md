@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.1.0) (2022-06-22)
+
+
+### Bug Fixes
+
+* **einfalt:** 保留原写入components ([d9cf078](https://github.com/JserWang/einfalt/commit/d9cf078f3622b28f2cecf3a22067f12fe997f347))
+* **einfalt:** alias relativePath replace error ([adbe362](https://github.com/JserWang/einfalt/commit/adbe3627f64af01dda3919a1849aa6271698bede))
+* **einfalt:** init json when condition is empty ([99e52e9](https://github.com/JserWang/einfalt/commit/99e52e9339d4ea586a024e7c7eaae6a9f6993680))
+* **einfalt:** inject chunk path for windows ([7c4d7a5](https://github.com/JserWang/einfalt/commit/7c4d7a50e3d635a0e462667a9bbc4f89a3ddf9bb))
+* **einfalt:** only process dist/app.json & write routes info to routes.md ([46c019f](https://github.com/JserWang/einfalt/commit/46c019fde6bbaf15eca6ea1b87b6f2a2ff1fb1db))
+
+
+
 ## [2.0.3](https://github.com/JserWang/einfalt/compare/v2.0.2...v2.0.3) (2022-06-10)
 
 
