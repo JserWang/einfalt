@@ -1,7 +1,9 @@
-import { dirname } from 'path'
+import { dirname, resolve } from 'path'
 import gulp from 'gulp'
 import chalk from 'chalk'
 // @ts-ignore
+import { readJsonSync, writeJsonSync } from 'fs-extra'
+import merge from 'lodash.merge'
 import { ResolvedConfig } from '../config'
 import alias from '../plugins/alias'
 import inject from '../plugins/inject'
@@ -48,4 +50,16 @@ export function jsonDistTask(config: ResolvedConfig, source?: string) {
     target = dirname(source)
   }
   return () => processDist(config, source!, target)
+}
+
+export function appJsonTask(config: ResolvedConfig) {
+  try {
+    const srcAppJson = readJsonSync(resolve(config.root, 'src', 'app.json'))
+    const outDirAppJson = readJsonSync(resolve(config.root, config.build.outDir, 'app.json'))
+
+    const merged = merge(outDirAppJson, srcAppJson)
+    writeJsonSync(resolve(config.root, config.build.outDir, 'app.json'), merged, { spaces: 2 })
+  } catch (e) {
+    config.logger.error(e)
+  }
 }

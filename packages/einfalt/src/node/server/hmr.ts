@@ -8,7 +8,7 @@ import { createDebugger, pathToGlob } from '../utils'
 import { execute } from '../tasks'
 import { lessTask } from '../tasks/less'
 import { templateDistTask, templateTask } from '../tasks/template'
-import { jsonDistTask, jsonTask } from '../tasks/json'
+import { appJsonTask, jsonDistTask, jsonTask } from '../tasks/json'
 import { NPM_SOURCE } from '../constants'
 import { npmTask } from '../tasks/npm'
 import { imageTask } from '../tasks/image'
@@ -60,7 +60,8 @@ function renameExtname(file: string, extname: string) {
   return file.replace(path.extname(file), extname)
 }
 
-function getModuleProcessor(config: ResolvedConfig, file: string, extname: string): () => TaskFunction[] {
+function getModuleProcessor(config: ResolvedConfig, file: string): () => TaskFunction[] {
+  const extname = path.extname(file)
   switch (extname) {
     case '.ts':
       return () => {
@@ -119,11 +120,14 @@ function getModuleProcessor(config: ResolvedConfig, file: string, extname: strin
 }
 
 export async function updateModules(file: string, config: ResolvedConfig) {
-  const extname = path.extname(file)
   if (file.includes(NPM_SOURCE)) {
     await execute([npmTask(config)])
   } else if (file.includes(config.entry)) {
-    const processor = getModuleProcessor(config, file, extname)
+    if (file.includes('/src/app.json')) {
+      return appJsonTask(config)
+    }
+
+    const processor = getModuleProcessor(config, file)
     if (processor) {
       return await execute(processor())
     }
