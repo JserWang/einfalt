@@ -1,3 +1,14 @@
+## [2.1.2](https://github.com/JserWang/einfalt/compare/v2.0.3...v2.1.2) (2022-06-23)
+
+
+### Bug Fixes
+
+* **einfalt:** less support alias ([b67c643](https://github.com/JserWang/einfalt/commit/b67c6437ffdc91ec5d61e63c34609c6c81e0e1c6))
+* **einfalt:** only process dist/app.json & write routes info to routes.md ([46c019f](https://github.com/JserWang/einfalt/commit/46c019fde6bbaf15eca6ea1b87b6f2a2ff1fb1db))
+* **einfalt:** src 覆盖 dist ([c7748c9](https://github.com/JserWang/einfalt/commit/c7748c99feaee6582be71ae6ff2656912716aa13))
+
+
+
 # [2.1.0](https://github.com/JserWang/einfalt/compare/v2.0.0-beta.3...v2.1.0) (2022-06-22)
 
 
