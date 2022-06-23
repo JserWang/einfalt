@@ -8,6 +8,7 @@ import rename from 'gulp-rename'
 import chalk from 'chalk'
 import { ResolvedConfig } from '../config'
 import inject from '../plugins/inject'
+import alias from '../plugins/alias'
 
 function build(config: ResolvedConfig, source: string, target?: string) {
   config.logger.info(chalk.green('build less ') + chalk.dim('start'), {
@@ -22,6 +23,7 @@ function build(config: ResolvedConfig, source: string, target?: string) {
     // 指定编译目录
     .src([source, ...config.build.ignore], { nodir: true, allowEmpty: true })
     .pipe(inject(config))
+    .pipe(alias(config.resolve?.alias))
     .pipe(less())
     .on('error', (err: string) => {
       hasError = true
