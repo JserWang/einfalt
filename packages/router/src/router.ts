@@ -34,6 +34,12 @@ export interface Router {
    */
   hasRoute(name: RouteRecordName): boolean
   /**
+   * Checks if a route with a given path exists
+   *
+   * @param page - Page of the route to check
+   */
+  hasPage(page: string): boolean
+  /**
    * Get a full list of all the {@link RouteRecord | route records}.
    */
   getRoutes(): RouteRecord[]
@@ -104,6 +110,10 @@ export function createRouter(this: any, options: RouterOptions): Router {
 
   function hasRoute(name: RouteRecordName): boolean {
     return !!matcher.getRouteRecordMatcherByName(name)
+  }
+
+  function hasPage(page: string): boolean {
+    return !!matcher.getRouteRecordMatcherByPage(page)
   }
 
   function findPageInStack(fullPagePath: string) {
@@ -253,6 +263,7 @@ export function createRouter(this: any, options: RouterOptions): Router {
   return {
     options,
     hasRoute,
+    hasPage,
     getRoutes,
     push,
     replace,
